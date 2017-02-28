@@ -5,21 +5,16 @@ class ListMovie extends React.Component {
 		super();
 	};
 
-	upVote () {
-		const movies = { ...this.props.movies }
-
-	}
-
 	render () {
 		
 		const { details } = this.props;
-		console.log(this.props.index, '{details.index}')
+		console.log(this.props, '{details.index}')
 
 		return (
 			
 				<li>
 					{details.name} {details.likes}
-					<button onClick={() => this.upVote}></button>
+					<button onClick={() => this.props.upVote({details})}></button>
 
 				</li>
 		)
