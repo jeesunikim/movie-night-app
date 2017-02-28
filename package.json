@@ -1,6 +1,7 @@
 {
   "name": "fb-movie-night",
   "version": "1.0.0",
+  "author": "Jeesun Kim",
   "devDependencies": {
     "autoprefixer-stylus": "0.10.0",
     "babel-eslint": "^7.1.1",
@@ -10,7 +11,8 @@
     "eslint-plugin-jsx-a11y": "^3.0.2",
     "eslint-plugin-react": "^6.8.0",
     "react-scripts": "0.6.1",
-    "stylus": "0.54.5"
+    "stylus": "0.54.5",
+    "webpack": "^2.2.1"
   },
   "dependencies": {
     "history": "4.2.0",
@@ -21,6 +23,8 @@
     "react-router": "4.0.0-alpha.4"
   },
   "scripts": {
+    "dev": "webpack -d --watch",
+    "prod": "webpack -p",
     "start": "react-scripts start",
     "watch": "concurrently --names \"webpack, stylus\" --prefix name \"npm run start\" \"npm run styles:watch\"",
     "build": "react-scripts build",
@@ -32,3 +36,4 @@
     "extends": "./node_modules/react-scripts/.eslintrc"
   }
 }
+ 

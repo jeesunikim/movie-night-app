@@ -1,5 +1,7 @@
 import React from 'react';
 import AddMovieForm from './AddMovieForm';
+import ListMovie from './ListMovie';
+import SampleMovies from '../sample-movies';
 
 class App extends React.Component {
 	constructor () {
@@ -10,14 +12,30 @@ class App extends React.Component {
 		}
 	}
 
+	componentWillMount () {
+		this.setState({
+			movies: SampleMovies
+		})
+	}
+
 	addMovie (movie) {
 		const movies = { ...this.state.movies};
-		console.log(movies.length)
+		
 	}
+
 	render () {
+		console.log(this.state.movies, 'likes')
 		return (
-			<div className="container">
-				<AddMovieForm addMovie={this.addMovie}/>
+			<div className="movie-night">
+				<div className="movie-night__wrapper">
+					<AddMovieForm addMovie = {this.addMovie}/>
+					<ul className="movie-night__list-movies">
+						{
+							Object.keys(this.state.movies)
+							.map(key => <ListMovie key={key} index={key} details={this.state.movies[key]} upVote={this.uptVote} />)
+						}
+					</ul>
+				</div>
 			</div>
 		)
 	}
