@@ -8,6 +8,8 @@ class App extends React.Component {
 		super();
 		this.addMovie = this.addMovie.bind(this);
 		this.upVote = this.upVote.bind(this);
+
+		// initial state
 		this.state = {
 			movies: {}
 		}
@@ -21,22 +23,36 @@ class App extends React.Component {
 
 	addMovie (movie) {
 		const movies = { ...this.state.movies};
+		const newMovieNumber = Object.keys(this.state.movies).length+1;
+
+		movies[`movie${newMovieNumber}`] = movie;
+		
+		this.setState({movies})
+		
+		// update our State
+
+		// set state
 		
 	}
 
-	upVote (numberVotes) {
-		const movies = { ...this.state.movies};
+	upVote (props) {
+		// const movies = { ...this.state.movies};
 
-		// this.setState({ this.state.movies:numberVotes
-		// numberVotes++;
-		console.log(numberVotes, 'numberVotes');
+
 	}
 
 	render () {
-		console.log(this.state.movies, 'likes', this.upVote(), 'this.upVote')
+		
+		// Object.keys(this.state.movies).map(key => {
+		// 	console.log(key.replace(/\D/g, ''));
+		// });
+
+		console.log(Object.keys(this.state.movies), 'this');
+
 		return (
 			<div className="movie-night">
 				<div className="movie-night__wrapper">
+					<h2>What movie should we watch this month?</h2>
 					<AddMovieForm addMovie = {this.addMovie}/>
 					<ul className="movie-night__list-movies">
 						{
