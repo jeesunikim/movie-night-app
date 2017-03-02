@@ -26,26 +26,16 @@ class App extends React.Component {
 		const newMovieNumber = Object.keys(this.state.movies).length+1;
 
 		movies[`movie${newMovieNumber}`] = movie;
-		
+	
 		this.setState({movies})
-		
-		// update our State
-
-		// set state
 		
 	}
 
 	upVote (props) {
-		// const movies = { ...this.state.movies};
-
 
 	}
 
 	render () {
-		
-		// Object.keys(this.state.movies).map(key => {
-		// 	console.log(key.replace(/\D/g, ''));
-		// });
 
 		console.log(Object.keys(this.state.movies), 'this');
 

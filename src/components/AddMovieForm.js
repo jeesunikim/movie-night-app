@@ -12,20 +12,21 @@ class AddMovieForm extends React.Component {
 		const movie = {
 			name: this.name.value,
 			desc: this.desc.value,
-			imageUrl: this.imageUrl.value
+			imageUrl: this.imageUrl.value,
+			likes: 0
 		}
 		console.log(movie, 'movie')
-		// this.props.addMovie(movie);
-		// this.movieForm.reset();
+		this.props.addMovie(movie);
+		this.movieForm.reset();
 	}
 
 	render() {
 		return (
-			<form className="movie-night__addmovie" onSubmit={(e) => this.submitMovie(e)}>
+			<form className="movie-night__addmovie" ref={(input) => this.movieForm = input} onSubmit={(e) => this.submitMovie(e)}>
 				<input ref={(input) => this.name = input } type="text" className="text-edit" placeholder="movie name...." />
 				<input ref={(input) => this.desc = input } type="text" className="text-edit" placeholder="why...?" />
 				<input ref={(input) => this.imageUrl = input } type="text" className="text-edit" placeholder="movie image" />
-				<button type="submit">Submit</button>
+				<button type="submit" >Submit</button>
 			</form>)
 	}
 }
