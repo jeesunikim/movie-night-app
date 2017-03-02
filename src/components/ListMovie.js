@@ -13,6 +13,7 @@ class ListMovie extends React.Component {
 		return (
 			
 				<li>
+					<img src={details.image} alt={details.name} />
 					{details.name} {details.likes}
 					<button onClick={() => this.props.upVote({details})}></button>
 
