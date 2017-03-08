@@ -37,13 +37,11 @@ class App extends React.Component {
 
 	render () {
 
-		console.log(Object.keys(this.state.movies), 'this');
-
 		return (
 			<div className="movie-night">
 				<div className="movie-night__wrapper">
 					<h2>What movie should we watch this month?</h2>
-					<AddMovieForm addMovie = {this.addMovie}/>
+					<AddMovieForm addMovie = {this.addMovie} />
 					<ul className="movie-night__list-movies">
 						{
 							Object.keys(this.state.movies)
