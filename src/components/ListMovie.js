@@ -8,16 +8,15 @@ class ListMovie extends React.Component {
 	render () {
 		
 		const { details } = this.props;
-		console.log(this.props, '{details.index}')
 
 		return (
 			
-				<li>
-					<img src={details.image} alt={details.name} />
-					{details.name} {details.likes}
-					<button onClick={() => this.props.upVote({details})}></button>
+			<li>
+				<img src={details.imageUrl} alt={details.name} />
+				{details.name} {details.likes} {details.desc}
+				<button onClick={() => this.props.upVote({details})}></button>
+			</li>
 
-				</li>
 		)
 	}
 
