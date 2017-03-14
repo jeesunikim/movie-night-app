@@ -1,9 +1,23 @@
 import React from 'react';
 
 class ListMovie extends React.Component {
+
 	constructor () {
 		super();
-	};
+		this.upVote = this.upVote.bind(this);
+	}
+
+	upVote (selectedMovie) {
+		const key = this.props.index;
+		const movie = this.props.movies[key];
+		const updatedVote = {
+			...movie,
+			'likes': selectedMovie.details.likes += 1,
+		}
+
+		this.props.updateMovie(key, updatedVote);
+
+	}
 
 	render () {
 		
@@ -13,8 +27,8 @@ class ListMovie extends React.Component {
 			
 			<li>
 				<img src={details.imageUrl} alt={details.name} />
-				{details.name} {details.likes} {details.desc}
-				<button onClick={() => this.props.upVote({details})}></button>
+					{details.name} {details.likes} {details.desc}
+				<button onClick={() => this.upVote({details})}></button>
 			</li>
 
 		)

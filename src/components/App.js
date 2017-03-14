@@ -1,24 +1,36 @@
 import React from 'react';
 import AddMovieForm from './AddMovieForm';
 import ListMovie from './ListMovie';
-import SampleMovies from '../sample-movies';
+import sampleMovies from '../sample-movies';
+import base from '../base';
+
 
 class App extends React.Component {
 	constructor () {
 		super();
 		this.addMovie = this.addMovie.bind(this);
-		this.upVote = this.upVote.bind(this);
+		this.updateMovie = this.updateMovie.bind(this);
 
 		// initial state
 		this.state = {
 			movies: {}
-		}
+		};
 	}
 
 	componentWillMount () {
+		this.ref = base.syncState(`/movies`,
+			{ 	
+				context: this,
+				state: 'movies'
+			});
+			
 		this.setState({
-			movies: SampleMovies
-		})
+			movies: sampleMovies
+		});
+	}
+
+	componentWillUnmount () {
+		base.removeBinding(this.ref);
 	}
 
 	addMovie (movie) {
@@ -27,12 +39,17 @@ class App extends React.Component {
 
 		movies[`movie${newMovieNumber}`] = movie;
 	
-		this.setState({movies})
+		this.setState({movies});
 		
 	}
 
-	upVote (props) {
+	updateMovie (key, updatedVote) {
 
+		const movies = { ...this.state.movies};
+		movies[key] = updatedVote;
+		this.setState({movies});
+
+		console.log(movies, 'movies')
 	}
 
 	render () {
@@ -41,11 +58,11 @@ class App extends React.Component {
 			<div className="movie-night">
 				<div className="movie-night__wrapper">
 					<h2>What movie should we watch this month?</h2>
-					<AddMovieForm addMovie = {this.addMovie} />
+					<AddMovieForm addMovie={this.addMovie} />
 					<ul className="movie-night__list-movies">
 						{
 							Object.keys(this.state.movies)
-							.map(key => <ListMovie key={key} index={key} details={this.state.movies[key]} upVote={this.upVote} />)
+							.map(key => <ListMovie key={key} index={key} movies={this.state.movies} details={this.state.movies[key]} updateMovie={this.updateMovie} />)
 						}
 					</ul>
 				</div>

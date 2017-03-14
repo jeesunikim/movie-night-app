@@ -29,9 +29,11 @@ class AddMovieForm extends React.Component {
 		this.movieForm.reset();
 	}
 
-	search (query = '') {
+	search (query='') {
 
-	    let url =`http://www.omdbapi.com/?s=${query}&y=&r=json&plot=short`;
+		// debounce is needed
+
+	    let url=`http://www.omdbapi.com/?s=${query}&y=&r=json&plot=short`;
 
 	    fetch(url, {
 
@@ -74,16 +76,16 @@ class AddMovieForm extends React.Component {
 	render() {
 		return (
 			<div>
-				<form className="movie-night__addmovie" ref={(input) => this.movieForm = input} onSubmit={(e) => this.submitMovie(e)}>
-					<input ref={(input) => this.name = input } type="text" className="text-edit" placeholder="movie name...." id="movieNameInput" onChange={ (e) => this.updateSearch(e) } />
-					<input ref={(input) => this.desc = input } type="text" className="text-edit" placeholder="why...?" />
-					<input ref={(input) => this.imageUrl = input } type="text" className="text-edit" id="movieImgUrl" placeholder="movie image" />
+				<form className="movie-night__addmovie" ref={(input) => this.movieForm=input} onSubmit={(e) => this.submitMovie(e)}>
+					<input ref={(input) => this.name = input } autoComplete="off" type="text" className="text-edit" placeholder="movie name...." id="movieNameInput" onChange={ (e) => this.updateSearch(e) } />
+					<input ref={(input) => this.desc = input } autoComplete="off" type="text" className="text-edit" placeholder="why...?" />
+					<input ref={(input) => this.imageUrl = input } autoComplete="off" type="text" className="text-edit" id="movieImgUrl" placeholder="movie image" />
 					<button type="submit" >Submit</button>
 				</form>
 				<ul className="movie-night__dropdown">
 					{
 						Object.keys(this.state.APImovies)
-						.map(key => <ListFetchMovies key={key} details={this.state.APImovies[key]} updateMovie = {this.updateMovie} />)
+						.map(key => <ListFetchMovies key={key} details={this.state.APImovies[key]} updateMovie={this.updateMovie} />)
 					}
 				</ul>		
 			</div>

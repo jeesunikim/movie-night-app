@@ -1,9 +1,6 @@
 import React from 'react';
 
 class ListFetchMovies extends React.Component {
-	constructor () {
-		super();
-	};
 
 	render () {
 
