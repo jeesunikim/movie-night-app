@@ -15,4 +15,9 @@ class ListFetchMovies extends React.Component {
 
 };
 
+ListFetchMovies.propTypes = {
+	details: React.PropTypes.object.isRequired,
+	updateMovie: React.PropTypes.func.isRequired
+}
+
 export default ListFetchMovies;

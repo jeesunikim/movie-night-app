@@ -10,6 +10,7 @@ class App extends React.Component {
 		super();
 		this.addMovie = this.addMovie.bind(this);
 		this.updateMovie = this.updateMovie.bind(this);
+		this.removeMovie = this.removeMovie.bind(this);
 
 		// initial state
 		this.state = {
@@ -34,7 +35,7 @@ class App extends React.Component {
 	}
 
 	addMovie (movie) {
-		const movies = { ...this.state.movies};
+		const movies = {...this.state.movies};
 		const newMovieNumber = Object.keys(this.state.movies).length+1;
 
 		movies[`movie${newMovieNumber}`] = movie;
@@ -44,12 +45,17 @@ class App extends React.Component {
 	}
 
 	updateMovie (key, updatedVote) {
-
-		const movies = { ...this.state.movies};
+		const movies = {...this.state.movies};
 		movies[key] = updatedVote;
 		this.setState({movies});
 
 		console.log(movies, 'movies')
+	}
+
+	removeMovie (key) {
+		const movies = {...this.state.movies}
+		movies[key] = null;
+		this.setState({movies});
 	}
 
 	render () {
@@ -62,7 +68,16 @@ class App extends React.Component {
 					<ul className="movie-night__list-movies">
 						{
 							Object.keys(this.state.movies)
-							.map(key => <ListMovie key={key} index={key} movies={this.state.movies} details={this.state.movies[key]} updateMovie={this.updateMovie} />)
+							.map(key => 
+								<ListMovie 
+									key={key} 
+									index={key}
+									movies={this.state.movies} 
+									details={this.state.movies[key]} 
+									updateMovie={this.updateMovie} 
+									removeMovie={this.removeMovie}
+								/>
+							)
 						}
 					</ul>
 				</div>

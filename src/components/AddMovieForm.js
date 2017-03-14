@@ -93,4 +93,8 @@ class AddMovieForm extends React.Component {
 	}
 }
 
+AddMovieForm.propTypes = {
+	addMovie: React.PropTypes.func.isRequired
+}
+
 export default AddMovieForm;
