@@ -2,6 +2,7 @@ import React from 'react';
 import AddMovieForm from './AddMovieForm';
 import ListMovie from './ListMovie';
 import sampleMovies from '../sample-movies';
+import Authentication from './Authentication';
 import base from '../base';
 
 
@@ -62,6 +63,7 @@ class App extends React.Component {
 
 		return (
 			<div className="movie-night">
+				<Authentication />
 				<div className="movie-night__wrapper">
 					<h2>What movie should we watch this month?</h2>
 					<AddMovieForm addMovie={this.addMovie} />
