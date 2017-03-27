@@ -34,13 +34,16 @@
     "webpack-hot-middleware": "^2.18.0"
   },
   "dependencies": {
+    "dotenv": "^4.0.0",
+    "express": "^4.15.2",
     "history": "4.2.0",
     "jshint-loader": "^0.8.4",
     "re-base": "2.2.0",
     "react": "15.3.2",
     "react-addons-css-transition-group": "15.3.2",
     "react-dom": "15.3.2",
-    "react-router": "4.0.0-alpha.4"
+    "react-router": "4.0.0-alpha.4",
+    "request": "^2.81.0"
   },
   "scripts": {
     "dev": "node devServer.js",
