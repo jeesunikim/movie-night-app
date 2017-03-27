@@ -2,73 +2,86 @@ const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 
 module.exports = {
 	devtool: "source-map",
-	entry: "./src/index",
+	context: path.resolve(__dirname, "src"),
+	entry: "index.js",
 	output: {
-		path: path.resolve(__dirname, 'public/assets/js'),
-		filename: 'bundle.js'
+		path: path.resolve(__dirname, "public/build"),
+		publicPath: "/build",
+		filename: "bundle.js"
 	},
-	modules: {
+	module: {
 		rules: [
-		//js
+			// {
+   //              test: /\.js$/, 
+   //              enforce: "pre", 
+   //              exclude: /node_modules/,
+   //              use: [
+   //              	{
+			// 	    	loader: "jshint-loader"
+   //              	}
+   //              ]
+   //          },
 			{
-                test: /\.js$/, 
-                enforce: "pre", 
-                exclude: /node_modules/,
-                use: [
-                    {
-                        loader: "jshint-loader"
-                    }
-                ]
-            },
-			{
-				test: /\.(js|jsx)$, 
+				test: /\.js$/, 
 				include: [
-					path.resolve(__dirname, "src")
+					path.resolve(__dirname, "./src")
 				],
-				exclude: [
-					path.resolve(__dirname, "src/assets"),
-					path.resolve(__dirname, "node_modules")
-				]
-				issuer: {test, include, exclude},
+				exclude: /node_modules/,
 				loader: "babel-loader",
 				options: {
-					presets: ["es2015"]
-				}
+					presets: ["es2015", "react"]
+				},
 			},
 			{
 				test: /\.(sass|scss)$/,
 				use: [{
-                	loader: "style-loader" 
+                	loader: "style-loader" // the order is backward so sass is loading first
             	}, {
                 	loader: "css-loader"
             	}, {
                 	loader: "sass-loader"
             	}]
-			}
+			},
+			{
+				test: /\.css$/,
+				loader:  ExtractTextPlugin.extract({
+		        	loader: 'css-loader?importLoaders=1',
+		        }),
+			},
 		]
 	},
-	jshint: {
-		camelcase: true,
-		emitErrors: false,
-		 failOnHint: false
-	},
+	// jshint: {
+	// 	camelcase: true,
+	// 	emitErrors: false,
+	// 	failOnHint: false
+	// },
 	plugins: [
-	    new ExtractTextPlugin("styles.css"),
-	    new UglifyJSPlugin()
+	    new ExtractTextPlugin({
+	    	filename: 'bundle.css',
+	    	allChunks: true,
+	    }),
 	],
-	devServer: {
-		proxy: {
-			'/api': 'htto://localhost:3000'
-		},
-		contentBase: path.join(__dirname, 'public'),
-	    compress: true,
-	    historyApiFallback: true,
-	    hot: true,
-	    https: false,
-	    noInfo: true, 
+	resolve: {
+		modules: [
+			"node_modules",
+			path.resolve('src', 'components'),
+			path.resolve('src')
+		]
 	}
+	// devServer: {
+	// 	proxy: {
+	// 		'/api': 'htto://localhost:3000'
+	// 	},
+	// 	contentBase: path.join(__dirname, './public'),
+	//     compress: true,
+	//     historyApiFallback: true,
+	//     hot: true,
+	//     https: false,
+	//     noInfo: true, 
+	// }
 };
