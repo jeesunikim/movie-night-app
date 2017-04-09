@@ -1,28 +1,25 @@
-const webpack = require('webpack')
-const WebpackDevServer = require('webpack-dev-server')
-const config = require('./webpack.config.local')
+const path = require('path');
+const express = require("express");
+const webpackDevMiddleware = require("webpack-dev-middleware");
+const webpackHotMiddleware = require('webpack-hot-middleware');
+const webpack = require("webpack");
+const webpackConfig = require("./webpack.config.dev");
+const app = express();
+const compiler = webpack(webpackConfig);
 
-new WebpackDevServer(webpack(config), {
-  publicPath: config.output.publicPath,
-  contentBase: './js',
-  hot: true,
-  quiet: false,
-  displayChunks: false,
-  stats: {
-    colors: true
-  },
-  proxy: {
-    '/**': {
-      target: 'http://site.lays.dev',
-      secure: false,
-      bypass: (req, res, proxyOptions) => {}
-    }
-  }
+app.use(webpackDevMiddleware(compiler, {
+  path: path.resolve(__dirname, "/public/build"),
+  index: 'index.html'
+}));
+
+app.use(webpackHotMiddleware(compiler));
+
+app.use(express.static(__dirname + '/public'));
+
+app.use(function(req, res) {
+  res.sendFile(__dirname + '/index.html')
 })
-  .listen(3000, 'localhost', err => {
-    if (err) {
-      console.log(err)
-    }
 
-    console.log('Listening at localhost:3000')
-  })
+app.listen(3000, function () {
+  console.log("Listening on port 3000!");
+});
