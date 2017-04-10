@@ -74,15 +74,4 @@ module.exports = {
 			path.resolve('src')
 		]
 	}
-	// devServer: {
-	// 	proxy: {
-	// 		'/api': 'htto://localhost:3000'
-	// 	},
-	// 	contentBase: path.join(__dirname, './public'),
-	//     compress: true,
-	//     historyApiFallback: true,
-	//     hot: true,
-	//     https: false,
-	//     noInfo: true, 
-	// }
 };
