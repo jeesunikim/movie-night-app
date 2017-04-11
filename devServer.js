@@ -8,6 +8,10 @@ const request = require('request');
 const colors = require('colors');
 const app = express();
 const compiler = webpack(webpackConfig);
+const base = require('./base');
+
+// console.log(base, 'base');
+
 require('dotenv').config();
 
 app.use(webpackDevMiddleware(compiler, {
@@ -29,17 +33,17 @@ app.use(webpackHotMiddleware(compiler));
   // res.sendFile(__dirname + '/public/index.html');
 // });
 
-app.get('/', (req, res) =>{
+app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
 
-app.get('/auth', (req, res) =>{
+app.get('/auth', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
 
-app.get('/auth/redirect', (req, res) =>{
-  console.log(colors.green(req.query), ' REQ from /auth/');
-  console.log(colors.red(res), ' RES from /auth/');
+app.get('/auth/redirect', (req, res) => {
+  // console.log(colors.green(req.query), ' REQ from /auth/');
+  // console.log(colors.red(res), ' RES from /auth/');
     const options = {
         uri: 'https://slack.com/api/oauth.access?code='
             +req.query.code+
@@ -47,21 +51,33 @@ app.get('/auth/redirect', (req, res) =>{
             '&client_secret='+process.env.SLACK_CLIENT_SECRET+
             '&redirect_uri='+process.env.SLACK_REDIRECT_URI,
         method: 'GET'
-    }
+    };
     request(options, (error, response, body) => {
         const JSONresponse = JSON.parse(body)
-        console.log(JSONresponse, 'JSONresponse');
+        console.log(colors.yellow(JSON.stringify(JSONresponse)), 'JSONresponse');
         if (!JSONresponse.ok){
-            console.log(colors.yellow(JSONresponse));
             res.send("Error encountered: \n"+JSON.stringify(JSONresponse)).status(200).end()
         }else{
-            console.log(colors.blue(JSONresponse));
-            res.send(colors.red("Success!"));
-            res.sendFile(__dirname + '/public/index.html');
-        }
-    })
-})
+            // const token;
+            console.log(colors.red(JSONresponse.access_token));
+            // res.send("Success!");
+            base.authWithCustomToken(JSONresponse.access_token, slackAuthHandler);
+            return res.redirect('/');
+            // res.send("Success! \n"+JSON.stringify(JSONresponse));
+            // res.sendFile(__dirname + '/public/index.html');
+        };
+    });
+});
 
-app.listen(3000, function () {
-  console.log("Listening on port 3000!");
+const slackAuthHandler = (error, user) => {
+  if (error) {
+    // doSomethingWithError(error);
+    console.log(error, 'error');
+  } 
+  // doSomethingWithAuthenticatedUser(user);
+  console.log(user, 'user');
+}
+
+app.listen(3333, () => {
+  console.log("Listening on port 3333!");
 });

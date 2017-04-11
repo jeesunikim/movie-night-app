@@ -8,15 +8,6 @@ class Autentication extends React.Component {
 
 	authenticate () {
 
-		// let apiUrl = `https://slack.com/oauth/authorize`;
-		let apiUrl = `https://slack.com/api/oauth.access`;
-
-		fetch(apiUrl, {
-			method: 'GET'
-		}).then((res) => {
-			console.log(res);
-		});
-
 	}
 
 	render () {

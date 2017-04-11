@@ -3,7 +3,7 @@ import AddMovieForm from './AddMovieForm';
 import ListMovie from './ListMovie';
 import sampleMovies from '../sample-movies';
 import Authentication from './Authentication';
-import base from '../base';
+import base from '../../base';
 
 
 class App extends React.Component {
