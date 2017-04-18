@@ -61,22 +61,22 @@ app.get('/auth/redirect', (req, res) => {
             // const token;
             console.log(colors.red(JSONresponse.access_token));
             // res.send("Success!");
-            base.authWithCustomToken(JSONresponse.access_token, slackAuthHandler);
-            return res.redirect('/');
-            // res.send("Success! \n"+JSON.stringify(JSONresponse));
-            // res.sendFile(__dirname + '/public/index.html');
+
+
+            base.post(`users/${JSONresponse.user.id}`, {
+              data: {
+                name: JSONresponse.user.name, 
+                avatar: JSONresponse.user.image_32
+              },then(err){
+                if(!err){
+                  // Router.transitionTo('dashboard');
+                  console.log('I am not error')
+                }
+              }
+            });
         };
     });
 });
-
-const slackAuthHandler = (error, user) => {
-  if (error) {
-    // doSomethingWithError(error);
-    console.log(error, 'error');
-  } 
-  // doSomethingWithAuthenticatedUser(user);
-  console.log(user, 'user');
-}
 
 app.listen(3333, () => {
   console.log("Listening on port 3333!");
