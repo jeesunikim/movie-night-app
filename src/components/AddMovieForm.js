@@ -14,7 +14,7 @@ class AddMovieForm extends React.Component {
 	}
 
 	componentWillUpdate () {
-		this.search();
+
 	}
 
 	submitMovie (event) {
@@ -27,6 +27,8 @@ class AddMovieForm extends React.Component {
 		}
 		this.props.addMovie(movie);
 		this.movieForm.reset();
+
+		// console.log(user, 'user in AddMovieForm');
 	}
 
 	search (query='') {

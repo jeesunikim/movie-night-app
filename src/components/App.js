@@ -3,7 +3,8 @@ import AddMovieForm from './AddMovieForm';
 import ListMovie from './ListMovie';
 import sampleMovies from '../sample-movies';
 import Authentication from './Authentication';
-import base from '../../base';
+import firebaseConfig from '../../firebase';
+import * as firebase from 'firebase';
 
 
 class App extends React.Component {
@@ -13,26 +14,30 @@ class App extends React.Component {
 		this.updateMovie = this.updateMovie.bind(this);
 		this.removeMovie = this.removeMovie.bind(this);
 
+		this.firebaseRef = firebaseConfig.database.ref('/movies');
+		this.movies = [];
+
+
 		// initial state
 		this.state = {
 			movies: {}
 		};
 	}
 
-	componentWillMount () {
-		this.ref = base.syncState(`/movies`,
-			{ 	
-				context: this,
-				state: 'movies'
-			});
-			
-		this.setState({
-			movies: sampleMovies
-		});
+	componentDidMount () {
+
+		this.firebaseRef.on("child_added", (dataSnapshot) => {
+		    this.movies.push(dataSnapshot.val());
+		    this.setState({
+		      movies: this.movies
+		    });
+
+		 }).bind(this);
+
 	}
 
 	componentWillUnmount () {
-		base.removeBinding(this.ref);
+		this.firebaseRef.off();
 	}
 
 	addMovie (movie) {
@@ -40,6 +45,8 @@ class App extends React.Component {
 		const newMovieNumber = Object.keys(this.state.movies).length+1;
 
 		movies[`movie${newMovieNumber}`] = movie;
+
+		this.firebaseRef.push(movie);
 	
 		this.setState({movies});
 		
@@ -50,12 +57,15 @@ class App extends React.Component {
 		movies[key] = updatedVote;
 		this.setState({movies});
 
-		console.log(movies, 'movies')
+		console.log('updateMovie ', movies[key], updatedVote)
 	}
 
 	removeMovie (key) {
 		const movies = {...this.state.movies}
-		movies[key] = null;
+		// movies[key] = null;
+
+		console.log(movies[key], ' movies[key]', key, ' key')
+
 		this.setState({movies});
 	}
 

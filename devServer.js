@@ -1,18 +1,37 @@
 const path = require('path');
-const express = require("express");
-const webpackDevMiddleware = require("webpack-dev-middleware");
+const express = require('express');
+
+// webpack
+const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
-const webpack = require("webpack");
-const webpackConfig = require("./webpack.config.dev");
+const webpack = require('webpack');
+const webpackConfig = require('./webpack.config.dev');
+
+// firebase
+const firebase = require('firebase');
+const firebaseConfig = require('./firebase');
+const serviceAccount = require('./fb-movie-night-service-account.json');
+
 const request = require('request');
 const colors = require('colors');
 const app = express();
 const compiler = webpack(webpackConfig);
-const base = require('./base');
 
-// console.log(base, 'base');
+let user = firebase.auth().currentUser;
+
+console.log(user, ' user');
+
+// console.log(user, 'LOGGED IN USER');
 
 require('dotenv').config();
+
+// const createFirebaseToken = (slackID) => {
+//   // The uid we'll assign to the user.
+//   const uid = `slack:${slackID}`;
+//   console.log(uid);
+//   // Create the custom token.
+//   return firebase.auth().createCustomToken(uid);
+// }
 
 app.use(webpackDevMiddleware(compiler, {
   path: path.resolve(__dirname, "/public/build"),
@@ -42,8 +61,6 @@ app.get('/auth', (req, res) => {
 });
 
 app.get('/auth/redirect', (req, res) => {
-  // console.log(colors.green(req.query), ' REQ from /auth/');
-  // console.log(colors.red(res), ' RES from /auth/');
     const options = {
         uri: 'https://slack.com/api/oauth.access?code='
             +req.query.code+
@@ -58,22 +75,25 @@ app.get('/auth/redirect', (req, res) => {
         if (!JSONresponse.ok){
             res.send("Error encountered: \n"+JSON.stringify(JSONresponse)).status(200).end()
         }else{
-            // const token;
             console.log(colors.red(JSONresponse.access_token));
-            // res.send("Success!");
 
+            const firebaseToken = createFirebaseToken(JSONresponse.user.id);
 
-            base.post(`users/${JSONresponse.user.id}`, {
-              data: {
-                name: JSONresponse.user.name, 
-                avatar: JSONresponse.user.image_32
-              },then(err){
-                if(!err){
-                  // Router.transitionTo('dashboard');
-                  console.log('I am not error')
-                }
-              }
-            });
+            console.log(firebaseToken, ' firebaseToken');
+
+            // base.post(`users/${JSONresponse.user.id}`, {
+            //   data: {
+            //     name: JSONresponse.user.name, 
+            //     avatar: JSONresponse.user.image_32
+            //   },then(err){
+            //     if(!err){
+            //       res.redirect('/');
+            //       user = JSONresponse.user.name;
+            //       console.log(colors.green(user), 'user in I am not an error section');
+            //     }
+            //   }
+            // });
+
         };
     });
 });
