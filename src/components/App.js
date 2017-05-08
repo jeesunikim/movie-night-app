@@ -40,16 +40,22 @@ class App extends React.Component {
 		this.firebaseRef.off();
 	}
 
-	addMovie (movie) {
+	addMovie (key, movie) {
 		const movies = {...this.state.movies};
 		const newMovieNumber = Object.keys(this.state.movies).length+1;
 
-		movies[`movie${newMovieNumber}`] = movie;
+		console.log(movie, ' movie', key, 'key');
 
-		this.firebaseRef.push(movie);
+		movies[`movie${newMovieNumber}`] = movie;
 	
 		this.setState({movies});
-		
+	
+		this.firebaseRef.child('movie' + newMovieNumber).set({
+			desc: movie.desc,
+			imageUrl: movie.imageUrl,
+			likes: movie.likes,
+			name: movie.name
+		});
 	}
 
 	updateMovie (key, updatedVote) {
@@ -64,9 +70,17 @@ class App extends React.Component {
 		const movies = {...this.state.movies}
 		// movies[key] = null;
 
-		console.log(movies[key], ' movies[key]', key, ' key')
+		console.log(movies, ' movies')
+
+		console.log(key, ' key');
+
+		// movies[key] = null;
 
 		this.setState({movies});
+
+		this.firebaseRef.child('movie' + key).remove();
+
+
 	}
 
 	render () {
