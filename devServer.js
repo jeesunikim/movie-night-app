@@ -1,4 +1,5 @@
 const path = require('path');
+const bodyParser = require('body-parser');
 const express = require('express');
 
 // webpack
@@ -31,6 +32,12 @@ const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
 app.use(cookieParser());
+
+// parse application/json 
+app.use(bodyParser.json())
+
+// parse application/x-www-form-urlencoded 
+app.use(bodyParser.urlencoded({ extended: false }))
 
 admin.initializeApp({
    credential: admin.credential.cert(serviceAccount),
@@ -75,16 +82,23 @@ app.get('/auth/redirect', (req, res) => {
          const userName = JSONresponse.user.name;
          const userPic = JSONresponse.user.image_32;
 
+         console.log(req.body, ' req.body');
+         // console.log(req.headers, 'req.headers')
+
          return admin.auth().createCustomToken(userID)
             .then((customToken) => {
 
                // var tempApp = firebaseConfig.firebase.initializeApp(firebaseConfig.config, '_temp_');
+               res.setHeader('Set-Cookie','test=value');
+               res.cookie('customToken', customToken, { expires: new Date(Date.now() + 900000), httpOnly: false });
 
-               console.log(customToken, ' customToken')
+               console.log(req.cookies, ' req.cookie')
+
+               // res.send({customToken: customToken})
 
                // return customToken;
 
-               // res.render('/', {firebaseToken: customToken});
+               res.redirect('/');
 
                // res.redirect('/').json({
                //    status: "success",

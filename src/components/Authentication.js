@@ -1,9 +1,21 @@
 import React from 'react';
+import Firebase from 'firebase';
+import firebaseConfig from '../../firebase';
 
 class Autentication extends React.Component {
 	constructor() {
 		super();
 		this.authenticate = this.authenticate.bind(this);
+
+		this.token = document.cookie.replace(/(?:(?:^|.*;\s*)customToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+
+		if(this.token.length > 1) {
+			console.log(this.token, ' this.token')
+		}
+
+		console.log(firebaseConfig, ' firebaseConfig');
+
+		
 	}
 
 	authenticate () {
@@ -12,9 +24,7 @@ class Autentication extends React.Component {
 
 	render () {
 		return (
-		<div className="movie-night__authentication">
-			<a href="https://slack.com/oauth/authorize?scope=identity.basic,identity.email,identity.team,identity.avatar&client_id=3992851480.155742621031"><img alt="Sign in with Slack" height="40" width="172" src="https://platform.slack-edge.com/img/sign_in_with_slack.png" srcSet="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x" /></a>
-		</div>
+			<div onClick={this.authenticate}>hi</div>
 		)
 	}
 
