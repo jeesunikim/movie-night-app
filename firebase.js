@@ -12,5 +12,6 @@ let database = firebase.database();
 
 module.exports = {
 	config,
-	database
+	database,
+	firebase
 }

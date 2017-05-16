@@ -87,6 +87,9 @@ class App extends React.Component {
 		return (
 			<div className="movie-night">
 				<Authentication />
+				<div className="movie-night__authentication">
+					<a href="https://slack.com/oauth/authorize?scope=identity.basic,identity.email,identity.team,identity.avatar&client_id=3992851480.155742621031"><img alt="Sign in with Slack" height="40" width="172" src="https://platform.slack-edge.com/img/sign_in_with_slack.png" srcSet="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x" /></a>
+				</div>
 				<div className="movie-night__wrapper">
 					<h2>What movie should we watch this month?</h2>
 					<AddMovieForm addMovie={this.addMovie} />
