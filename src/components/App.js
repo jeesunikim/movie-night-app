@@ -17,11 +17,11 @@ class App extends React.Component {
 		this.firebaseRef = firebaseConfig.database.ref('/movies');
 		this.movies = [];
 
-
 		// initial state
 		this.state = {
 			movies: {}
 		};
+
 	}
 
 	componentDidMount () {
@@ -32,6 +32,8 @@ class App extends React.Component {
 		      movies: this.movies
 		    });
 
+		    console.log(this.movies, ' this.movies');
+
 		 }).bind(this);
 
 	}
@@ -40,11 +42,9 @@ class App extends React.Component {
 		this.firebaseRef.off();
 	}
 
-	addMovie (key, movie) {
+	addMovie (movie) {
 		const movies = {...this.state.movies};
-		const newMovieNumber = Object.keys(this.state.movies).length+1;
-
-		console.log(movie, ' movie', key, 'key');
+		const newMovieNumber = Object.keys(this.state.movies).length;
 
 		movies[`movie${newMovieNumber}`] = movie;
 	
@@ -68,13 +68,12 @@ class App extends React.Component {
 
 	removeMovie (key) {
 		const movies = {...this.state.movies}
-		// movies[key] = null;
 
 		console.log(movies, ' movies')
 
 		console.log(key, ' key');
 
-		// movies[key] = null;
+		movies[key] = null;
 
 		this.setState({movies});
 
