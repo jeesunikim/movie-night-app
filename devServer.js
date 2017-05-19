@@ -70,6 +70,8 @@ app.get('/auth/redirect', (req, res) => {
       method: 'GET'
    };
 
+   console.log(req.cookies.state, ' req.cookies.state')
+
    request(options, (error, response, body) => {
       const JSONresponse = JSON.parse(body)
       console.log(colors.yellow(JSON.stringify(JSONresponse)), 'JSONresponse');
@@ -88,50 +90,29 @@ app.get('/auth/redirect', (req, res) => {
          return admin.auth().createCustomToken(userID)
             .then((customToken) => {
 
-               // var tempApp = firebaseConfig.firebase.initializeApp(firebaseConfig.config, '_temp_');
-               res.setHeader('Set-Cookie','test=value');
-               res.cookie('customToken', customToken, { expires: new Date(Date.now() + 900000), httpOnly: false });
+               const stringifiedToken = JSON.stringify(customToken);
 
-               console.log(req.cookies, ' req.cookie')
 
-               // res.send({customToken: customToken})
 
-               // return customToken;
+               console.log(stringifiedToken.replace(/\"/g, ""), ' customToken')
 
-               res.redirect('/');
+               res.render('/', {
+                  slackAccessToken,
+                  userID,
+                  userName,
+                  userPic 
+               })
 
-               // res.redirect('/').json({
-               //    status: "success",
-               //    token: customToken
-               // })
+               // res.cookie('customToken', stringifiedToken.replace(/\"/g, ""));
+               // // res.setHeader('customToken', customToken);
+               
+               // res.redirect('/');
+
             });
       };
    });
 });
 
-// var tempApp = firebaseConfig.firebase.initializeApp(firebaseConfig.config, '_temp_');
-// tempApp.auth().signInWithCustomToken(firebaseToken).then(function(user) {
-
-//    const tasks = [tempApp.database().ref('/SlackAccessToken/' + user.uid)
-//    .set('${slackAccessToken}')];
-
-//    if ('${userName}' !== user.displayName || '${profilePic}' !== user.photoURL) {
-//       tasks.push(user.updateProfile({displayName: '${userName}', photoURL: '${profilePic}'}));
-//    }
-
-//    return Promise.all(tasks).then(function() {
-//       var defaultApp = firebase.initializeApp(firebaseConfig.config);
-
-//       console.log(defaultApp, ' defaultApp')
-//       Promise.all([
-//          defaultApp.auth().signInWithCustomToken(firebaseToken),
-//          tempApp.delete()]).then(function() {
-//             window.close(); 
-//          });
-//       });
-// });
-
-console.log(firebaseToken, ' firebaseToken')
 
 app.listen(3333, () => {
    console.log("Listening on port 3333!");
