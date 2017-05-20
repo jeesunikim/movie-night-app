@@ -16,6 +16,8 @@ class ListMovie extends React.Component {
 		}
 
 		this.props.updateMovie(index, updatedVote);
+
+		console.log(index, updatedVote, ' index', 'updated Vote')
 	}
 
 	render () {
@@ -40,12 +42,12 @@ class ListMovie extends React.Component {
 
 };
 
-ListMovie.propTypes = {
-	movies: React.PropTypes.object.isRequired,
-	details: React.PropTypes.object.isRequired,
-	index: React.PropTypes.string.isRequired,
-	removeMovie: React.PropTypes.func.isRequired
+// ListMovie.propTypes = {
+// 	movies: React.PropTypes.object.isRequired,
+// 	details: React.PropTypes.object.isRequired,
+// 	index: React.PropTypes.string.isRequired,
+// 	removeMovie: React.PropTypes.func.isRequired
 
-}
+// }
 
 export default ListMovie;
