@@ -4,11 +4,14 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
+const extractSass = new ExtractTextPlugin({
+    filename: "bundle.css"
+});
 
 module.exports = {
 	devtool: "source-map",
 	context: path.resolve(__dirname, "src"),
-	entry: "index.js",
+	entry: ["index.js", './assets/styles/app.scss'],
 	output: {
 		path: path.resolve(__dirname, "public/build"),
 		publicPath: "/build",
@@ -16,16 +19,6 @@ module.exports = {
 	},
 	module: {
 		rules: [
-			// {
-   //              test: /\.js$/, 
-   //              enforce: "pre", 
-   //              exclude: /node_modules/,
-   //              use: [
-   //              	{
-			// 	    	loader: "jshint-loader"
-   //              	}
-   //              ]
-   //          },
 			{
 				test: /\.js$/, 
 				include: [
@@ -40,13 +33,7 @@ module.exports = {
 			},
 			{
 				test: /\.(sass|scss)$/,
-				use: [{
-                	loader: "style-loader" // the order is backward so sass is loading first
-            	}, {
-                	loader: "css-loader"
-            	}, {
-                	loader: "sass-loader"
-            	}]
+				loader: ExtractTextPlugin.extract(['css-loader', 'sass-loader'])
 			},
 			{
 				test: /\.css$/,
@@ -56,16 +43,8 @@ module.exports = {
 			},
 		]
 	},
-	// jshint: {
-	// 	camelcase: true,
-	// 	emitErrors: false,
-	// 	failOnHint: false
-	// },
 	plugins: [
-	    new ExtractTextPlugin({
-	    	filename: 'bundle.css',
-	    	allChunks: true,
-	    }),
+	    extractSass
 	],
 	resolve: {
 		modules: [
