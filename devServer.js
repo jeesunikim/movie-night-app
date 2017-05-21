@@ -1,6 +1,7 @@
 const path = require('path');
 const bodyParser = require('body-parser');
 const express = require('express');
+const router = express.Router();
 
 // webpack
 const webpackDevMiddleware = require('webpack-dev-middleware');
@@ -20,17 +21,20 @@ const adminConfig = {
    databaseURL: firebaseConfig.config.databaseURL
 };
 
-// firebase var
-let firebaseToken;
-
 const request = require('request');
 const colors = require('colors');
 const app = express();
 const compiler = webpack(webpackConfig);
 const cookieParser = require('cookie-parser');
 
-require('dotenv').config();
+// var
+let slackAccessToken;
+let userID;
+let userName;
+let userPic;
+let firebaseToken;
 
+require('dotenv').config();
 app.use(cookieParser());
 
 // parse application/json 
@@ -70,49 +74,54 @@ app.get('/auth/redirect', (req, res) => {
       method: 'GET'
    };
 
-   console.log(req.cookies.state, ' req.cookies.state')
-
    request(options, (error, response, body) => {
+       
       const JSONresponse = JSON.parse(body)
+      
       console.log(colors.yellow(JSON.stringify(JSONresponse)), 'JSONresponse');
+      
       if (!JSONresponse.ok){
+
          res.send("Error encountered: \n"+JSON.stringify(JSONresponse)).status(200).end()
+      
       }else{
 
-         const slackAccessToken = JSONresponse.access_token;
-         const userID = JSONresponse.user.id;
-         const userName = JSONresponse.user.name;
-         const userPic = JSONresponse.user.image_32;
+          slackAccessToken = JSONresponse.access_token;
+          userID = JSONresponse.user.id;
+          userName = JSONresponse.user.name;
+          userPic = JSONresponse.user.image_32;
+        
+         admin.auth().createCustomToken(userID).then((customToken) => {
 
-         console.log(req.body, ' req.body');
-         // console.log(req.headers, 'req.headers')
+            const stringifiedToken = JSON.stringify(customToken);
 
-         return admin.auth().createCustomToken(userID)
-            .then((customToken) => {
+            firebaseToken = stringifiedToken.replace(/\"/g, "");
 
-               const stringifiedToken = JSON.stringify(customToken);
+            console.log(colors.red(userID, userName, userPic), ' userID, userName, userPic');
 
+            console.log(colors.blue(firebaseToken), ' firebaseToken', typeof firebaseToken);
+            
+            res.redirect('/authenticated');
 
-
-               console.log(stringifiedToken.replace(/\"/g, ""), ' customToken')
-
-               res.render('/', {
-                  slackAccessToken,
-                  userID,
-                  userName,
-                  userPic 
-               })
-
-               // res.cookie('customToken', stringifiedToken.replace(/\"/g, ""));
-               // // res.setHeader('customToken', customToken);
-               
-               // res.redirect('/');
-
-            });
+         });
       };
    });
 });
 
+router.get('/', (req, res) => {
+   res.json({ 
+      message: 'Welcome to the coolest API on earth' ,
+      userID: userID,
+      userName: userName,
+      userPic: userPic,
+      slackAccessToken: slackAccessToken,
+      firebaseToken: firebaseToken
+   })
+});
+
+console.log(colors.blue(slackAccessToken, userID, userName, userPic, firebaseToken));
+
+app.use('/api', router);
 
 app.listen(3333, () => {
    console.log("Listening on port 3333!");

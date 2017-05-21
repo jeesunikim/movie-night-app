@@ -4,3 +4,4 @@ node_modules/
 npm-debug.log
 public/build
 fb-movie-night-service-account.json
+firebase.js

@@ -3,53 +3,80 @@ import Firebase from 'firebase';
 import firebaseConfig from '../../firebase';
 
 class Autentication extends React.Component {
+
 	constructor() {
 		super();
-		this.authenticate = this.authenticate.bind(this);
 
-		this.token = document.cookie.replace(/(?:(?:^|.*;\s*)customToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+		this.logout = this.logout.bind(this);
 
-		console.log(document.cookie, 'document.cookie')
+		let userName, userPhoto, userID;
 
-		// console.log(JSON.stringify(slackAccessToken))
+		Firebase.auth().onAuthStateChanged((user) => {
+    		if (user) {
+    			const user = Firebase.auth().currentUser;
+    			console.log(user, ' user ');
+    		} else {
+        		console.log('onAuthStateChanged else')
+    		}
+		});
 
-		// if(this.token.length > 1) {
-			var tempApp = firebaseConfig.firebase.initializeApp(firebaseConfig.config, 'firstborn_users');
-			console.log(this.token, ' this.token')
-			tempApp.auth().signInWithCustomToken(this.token).then(user => {
+		fetch('/api', {
 
-				if (user != null) {
-					name = user.displayName;
-					email = user.email;
-					photoUrl = user.photoURL;
-					emailVerified = user.emailVerified;
-					uid = user.uid;
-				}
+	    	method: 'GET'
 
-			}).catch((error) => {
-			  // Handle Errors here.
+	    }).then((res) => {
+
+    		return res.json();
+
+	    }).then((json) => {
+
+	    	console.log(json, ' json')
+
+	    	Firebase.auth().signInWithCustomToken(json.firebaseToken).catch((error) => {
 			  var errorCode = error.code;
 			  var errorMessage = error.message;
-			  if (errorCode === 'auth/invalid-custom-token') {
-			    console.log('The token you provided is not valid.');
-			  } else {
-			    console.error(error);
-			  }
+			  console.log('hi')
 			});
-		// }
 
-		console.log(firebaseConfig, ' firebaseConfig');
+			Firebase.auth().onAuthStateChanged((user) => {
 
-		
+				if(user != null) {
+
+					user.updateProfile({
+					  displayName: json.userName,
+					  photoURL: json.userPic
+					}).then(() => {
+					  console.log('hoorrrayyy')
+					}, (error) => {
+					  // An error happened.
+					});
+				} else {
+					console.log('error')
+				}
+			});
+
+    		console.log(json, 'json')
+	    			    	
+	    }).catch((err) => {
+
+	    	console.log(err, 'err');
+
+	    });
+
 	}
 
-	authenticate () {
 
+	logout () {
+		Firebase.auth().currentUser.getToken(true).then(function(token) {
+			console.log(token, ' token');
+		});
 	}
 
 	render () {
 		return (
-			<div onClick={this.authenticate}>hi</div>
+			<div>
+				<a onClick={this.logout}>logout</a>
+			</div>
 		)
 	}
 
