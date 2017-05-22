@@ -8,8 +8,11 @@ class Autentication extends React.Component {
 		super();
 
 		this.logout = this.logout.bind(this);
+		this.login = this.login.bind(this);
 
 		let userName, userPhoto, userID;
+
+		console.log(Firebase.auth(), ' Firebase.auth()');
 
 		// Firebase.auth().onAuthStateChanged((user) => {
 		// 	if (user) {
@@ -20,6 +23,9 @@ class Autentication extends React.Component {
 		// 	}
 		// });
 
+	}
+
+	login () {
 		fetch('/api', {
 
 			method: 'GET'
@@ -76,9 +82,10 @@ class Autentication extends React.Component {
 	render () {
 		return (
 			<div>
-			<a onClick={this.logout}>logout</a>
+				<a onClick={this.logout}>logout</a>
+				<a onClick={this.login}>login</a>
 			</div>
-			)
+		)
 	}
 
 };
