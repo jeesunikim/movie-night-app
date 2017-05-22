@@ -11,73 +11,74 @@ class Autentication extends React.Component {
 
 		let userName, userPhoto, userID;
 
-		Firebase.auth().onAuthStateChanged((user) => {
-    		if (user) {
-    			const user = Firebase.auth().currentUser;
-    			console.log(user, ' user ');
-    		} else {
-        		console.log('onAuthStateChanged else')
-    		}
-		});
+		// Firebase.auth().onAuthStateChanged((user) => {
+		// 	if (user) {
+		// 		const user = Firebase.auth().currentUser;
+		// 		console.log(user, ' user ');
+		// 	} else {
+		// 		console.log('onAuthStateChanged else')
+		// 	}
+		// });
 
 		fetch('/api', {
 
-	    	method: 'GET'
+			method: 'GET'
 
-	    }).then((res) => {
+		}).then((res) => {
 
-    		return res.json();
+			return res.json();
 
-	    }).then((json) => {
+		}).then((json) => {
 
-	    	console.log(json, ' json')
+			console.log(json, ' json')
 
-	    	Firebase.auth().signInWithCustomToken(json.firebaseToken).catch((error) => {
-			  var errorCode = error.code;
-			  var errorMessage = error.message;
-			  console.log('hi')
+			Firebase.auth().signInWithCustomToken(json.firebaseToken).catch((error) => {
+				var errorCode = error.code;
+				var errorMessage = error.message;
 			});
 
 			Firebase.auth().onAuthStateChanged((user) => {
 
-				if(user != null) {
+				if(user !== null) {
 
 					user.updateProfile({
-					  displayName: json.userName,
-					  photoURL: json.userPic
+						displayName: json.userName,
+						photoURL: json.userPic
 					}).then(() => {
-					  console.log('hoorrrayyy')
+
+						console.log('user != null');
+
 					}, (error) => {
-					  // An error happened.
+
+						console.log('error within user != null');
+
 					});
 				} else {
-					console.log('error')
+					console.log('user is not logged in. user == null ')
 				}
 			});
 
-    		console.log(json, 'json')
-	    			    	
-	    }).catch((err) => {
+		}).catch((err) => {
 
-	    	console.log(err, 'err');
+			console.log(err, 'err');
 
-	    });
+		});
 
 	}
 
 
 	logout () {
-		Firebase.auth().currentUser.getToken(true).then(function(token) {
-			console.log(token, ' token');
-		});
+		Firebase.auth().signOut().then(() =>{
+			console.log('success');
+		})
 	}
 
 	render () {
 		return (
 			<div>
-				<a onClick={this.logout}>logout</a>
+			<a onClick={this.logout}>logout</a>
 			</div>
-		)
+			)
 	}
 
 };
