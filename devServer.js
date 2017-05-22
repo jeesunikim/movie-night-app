@@ -98,8 +98,6 @@ app.get('/auth/redirect', (req, res) => {
             firebaseToken = stringifiedToken.replace(/\"/g, "");
 
             console.log(colors.red(userID, userName, userPic), ' userID, userName, userPic');
-
-            console.log(colors.blue(firebaseToken), ' firebaseToken', typeof firebaseToken);
             
             res.redirect('/authenticated');
 
@@ -118,8 +116,6 @@ router.get('/', (req, res) => {
       firebaseToken: firebaseToken
    })
 });
-
-console.log(colors.blue(slackAccessToken, userID, userName, userPic, firebaseToken));
 
 app.use('/api', router);
 
