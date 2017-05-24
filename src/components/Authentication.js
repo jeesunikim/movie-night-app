@@ -15,36 +15,34 @@ class Autentication extends React.Component {
 			uid: null
 		}
 
-		// let userName, userPhoto, userID;
-
 		console.log(Firebase.auth(), ' Firebase.auth()');
+		console.log(this.state.uid, ' this.state.uid')
 
-		// Firebase.auth().onAuthStateChanged((user) => {
-		// 	if (user) {
-		// 		const user = Firebase.auth().currentUser;
-		// 		console.log(user, ' user ');
-		// 	} else {
-		// 		console.log('onAuthStateChanged else')
-		// 	}
-		// });
+		console.log(Firebase.database().ref("users"), ' firebase users');
+
+
 
 	}
 
 	componentDidMount() {
-		Firebase.auth().onAuthStateChanged((user) => {
-			if(user) {
-				console.log('user exists');
-			}
-		});
 
+		if(window.location.pathname === '/authenticated') {
+			console.log('true');
+			this.authenticate();
+		};
 
-				// if(user !== null) {
-
-					
+		// Firebase.auth().onAuthStateChanged((user) => {
+		// 	if(user) {
+		// 		console.log('user exists');
+		// 	}else{
+		// 		console.log('user does not exist', user)
+		// 	}
+		// });	
 	}
+
 	authenticate () {
 		console.log(' I am so authenticate');
-		fetch('/api', {
+		fetch('/api/users', {
 
 			method: 'GET'
 
@@ -104,10 +102,11 @@ class Autentication extends React.Component {
 	}
 
 	renderLogin () {
+
 		return (
 			<nav className="login">
 				<p>Sign in to vote or submit a movie</p>
-				<a onClick={this.authenticate}>login</a>
+				
 				<a href="https://slack.com/oauth/authorize?scope=identity.basic,identity.email,identity.team,identity.avatar&client_id=3992851480.155742621031"><img alt="Sign in with Slack" height="40" width="172" src="https://platform.slack-edge.com/img/sign_in_with_slack.png" srcSet="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x" /></a>
 			</nav>
 		)

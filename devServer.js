@@ -10,7 +10,7 @@ const webpack = require('webpack');
 const webpackConfig = require('./webpack.config.dev');
 
 // firebase
-// const firebase = require('firebase');
+const firebase = require('firebase');
 const firebaseConfig = require('./firebase');
 
 // firebase admin
@@ -27,6 +27,10 @@ const app = express();
 const compiler = webpack(webpackConfig);
 const cookieParser = require('cookie-parser');
 
+require('dotenv').config();
+
+const port = process.env.PORT || 3333;
+
 // var
 let slackAccessToken;
 let userID;
@@ -34,14 +38,11 @@ let userName;
 let userPic;
 let firebaseToken;
 
-require('dotenv').config();
 app.use(cookieParser());
 
 // parse application/json 
-app.use(bodyParser.json())
-
-// parse application/x-www-form-urlencoded 
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 admin.initializeApp({
    credential: admin.credential.cert(serviceAccount),
@@ -106,7 +107,7 @@ app.get('/auth/redirect', (req, res) => {
    });
 });
 
-router.get('/', (req, res) => {
+router.get('/users', (req, res) => {
    res.json({ 
       message: 'Welcome to the coolest API on earth' ,
       userID: userID,
@@ -119,6 +120,6 @@ router.get('/', (req, res) => {
 
 app.use('/api', router);
 
-app.listen(3333, () => {
+app.listen(port, () => {
    console.log("Listening on port 3333!");
 });
