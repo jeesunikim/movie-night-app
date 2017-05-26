@@ -87,12 +87,18 @@ app.get('/auth/redirect', (req, res) => {
       
       }else{
 
+         let additionalClaims = {
+            slackAccessToken: JSONresponse.access_token,
+            uid: JSONresponse.user.id,
+            displayName: JSONresponse.user.name,
+            photoURL: JSONresponse.user.image_32
+         }
           slackAccessToken = JSONresponse.access_token;
           userID = JSONresponse.user.id;
           userName = JSONresponse.user.name;
           userPic = JSONresponse.user.image_32;
         
-         admin.auth().createCustomToken(userID).then((customToken) => {
+         admin.auth().createCustomToken(userID, additionalClaims).then((customToken) => {
 
             const stringifiedToken = JSON.stringify(customToken);
 

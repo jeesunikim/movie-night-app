@@ -15,17 +15,13 @@ class Autentication extends React.Component {
 			uid: null
 		}
 
-		console.log(Firebase.auth(), ' Firebase.auth()');
 		console.log(this.state.uid, ' this.state.uid')
-
-		console.log(Firebase.database().ref("users"), ' firebase users');
-
 
 
 	}
 
 	componentDidMount() {
-
+		console.log('authenticate world');
 		if(window.location.pathname === '/authenticated') {
 			console.log('true');
 			this.authenticate();
@@ -33,11 +29,11 @@ class Autentication extends React.Component {
 
 		// Firebase.auth().onAuthStateChanged((user) => {
 		// 	if(user) {
-		// 		console.log('user exists');
+		// 		this.authenticate();
 		// 	}else{
 		// 		console.log('user does not exist', user)
 		// 	}
-		// });	
+		// });
 	}
 
 	authenticate () {
@@ -45,7 +41,7 @@ class Autentication extends React.Component {
 		fetch('/api/users', {
 
 			method: 'GET'
-
+			
 		}).then((res) => {
 
 			return res.json();
@@ -54,33 +50,42 @@ class Autentication extends React.Component {
 
 			console.log(json, ' json')
 
-			Firebase.auth().signInWithCustomToken(json.firebaseToken).catch((error) => {
+			firebaseConfig.auth.signInWithCustomToken(json.firebaseToken).catch((error) => {
 				var errorCode = error.code;
 				var errorMessage = error.message;
 			});
 
-			Firebase.auth().onAuthStateChanged((user) => {
+			firebaseConfig.auth.onAuthStateChanged((user) => {
 
-				if(user !== null) {
+				console.log('this causes is to call multiple times')
 
+				if(user != null) {
+
+					console.log(firebaseConfig.auth.currentUser, ' currentUser');
+
+					//firebase.database().ref('user-posts/' + myUserId)
+      
 					user.updateProfile({
-						uid: json.userID,
+						uid: firebaseConfig.auth.currentUser.uid,
 						displayName: json.userName,
 						photoURL: json.userPic
 
 					}).then(() => {
 
 						this.setState({
-							uid: json.userID
-						})
+							uid: firebaseConfig.auth.currentUser.uid
+						});
 
-						console.log('user != null', this.state);
+						// const usersRef = firebaseConfig.database.ref('users/' + firebaseConfig.auth.currentUser.uid).push();
+						// usersRef.set({
+						// 	uid: firebaseConfig.auth.currentUser.uid,
+						// 	displayName: json.userName,
+						// 	photoURL: json.userPic
+						// })
 
-					}, (error) => {
-
-						console.log('error within user != null');
 
 					});
+
 				} else {
 					console.log('user is not logged in. user == null ')
 				}
@@ -95,7 +100,7 @@ class Autentication extends React.Component {
 	}
 
 	logout () {
-		Firebase.auth().signOut().then(() =>{
+		firebaseConfig.auth.signOut().then(() =>{
 			console.log('success');
 			this.setState({ uid: null })
 		})
