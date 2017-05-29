@@ -11,7 +11,7 @@ class App extends React.Component {
 	constructor () {
 		super();
 		this.addMovie = this.addMovie.bind(this);
-		this.updateMovie = this.updateMovie.bind(this);
+		this.upvoteMovie = this.upvoteMovie.bind(this);
 		this.removeMovie = this.removeMovie.bind(this);
 
 		this.firebaseRef = firebaseConfig.database.ref('/movies');
@@ -58,12 +58,10 @@ class App extends React.Component {
 		});
 	}
 
-	updateMovie (key, updatedVote) {
+	upvoteMovie (key, upvotedMovie) {
 		const movies = {...this.state.movies};
-		movies[key] = updatedVote;
+		movies[key] = upvotedMovie;
 		this.setState({movies});
-
-		console.log('updateMovie ', movies[key], updatedVote)
 	}
 
 	removeMovie (key) {
@@ -99,7 +97,7 @@ class App extends React.Component {
 									index={key}
 									movies={this.state.movies} 
 									details={this.state.movies[key]} 
-									updateMovie={this.updateMovie} 
+									upvoteMovie={this.upvoteMovie} 
 									removeMovie={this.removeMovie}
 								/>
 							)

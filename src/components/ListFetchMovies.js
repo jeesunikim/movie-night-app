@@ -7,7 +7,7 @@ class ListFetchMovies extends React.Component {
 		const { details } = this.props;
 
 		return (
-			<li onClick={(evt) => this.props.updateMovie({details})}>
+			<li onClick={(evt) => this.props.upvoteMovie({details})}>
 				{details.Title}  {details.Year}
 			</li>
 		)
@@ -17,7 +17,7 @@ class ListFetchMovies extends React.Component {
 
 ListFetchMovies.propTypes = {
 	details: React.PropTypes.object.isRequired,
-	updateMovie: React.PropTypes.func.isRequired
+	upvoteMovie: React.PropTypes.func.isRequired
 }
 
 export default ListFetchMovies;

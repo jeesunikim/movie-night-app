@@ -1,23 +1,37 @@
 import React from 'react';
+import firebaseConfig from '../../firebase';
 
 class ListMovie extends React.Component {
 
 	constructor () {
 		super();
 		this.upVote = this.upVote.bind(this);
+		this.firebaseRef = firebaseConfig.database.ref('/movies');
 	}
 
 	upVote (selectedMovie, index) {
-		const movie = this.props.movies[index];
 
-		const updatedVote = {
-			...movie,
-			'likes': selectedMovie.details.likes += 1,
+		if(firebaseConfig.auth.currentUser) {
+
+			// this.firebaseRef.child('movie' + index + '/likes').set({
+			// 	userID: firebaseConfig.auth.currentUser.uid
+			// });
+
+			console.log(selectedMovie, ' selectedMovie', index, ' index');
+
+			console.log(firebaseConfig.auth.currentUser.uid, ' firebaseConfig.auth.currentUser');
+
+			const movie = this.props.movies[index];
+
+			const upvoteMovie = {
+				...movie,
+				'likes': selectedMovie.details.likes += 1,
+			}
+
+			console.log(index, upvoteMovie, ' index, upvoteMovie')
+
+			this.props.upvoteMovie(index, upvoteMovie);
 		}
-
-		this.props.updateMovie(index, updatedVote);
-
-		console.log(index, updatedVote, ' index', 'updated Vote')
 	}
 
 	render () {
