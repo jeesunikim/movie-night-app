@@ -12,32 +12,22 @@ class Autentication extends React.Component {
 		this.renderLogin = this.renderLogin.bind(this);
 
 		this.state = {
-			uid: null
+			uid: null,
+			userName: null,
+			userPhoto: null
 		}
 
 		console.log(this.state.uid, ' this.state.uid')
 
-
 	}
 
 	componentDidMount() {
-		console.log('authenticate world');
 		if(window.location.pathname === '/authenticated') {
-			console.log('true');
 			this.authenticate();
 		};
-
-		// Firebase.auth().onAuthStateChanged((user) => {
-		// 	if(user) {
-		// 		this.authenticate();
-		// 	}else{
-		// 		console.log('user does not exist', user)
-		// 	}
-		// });
 	}
 
 	authenticate () {
-		console.log(' I am so authenticate');
 		fetch('/api/users', {
 
 			method: 'GET'
@@ -60,10 +50,6 @@ class Autentication extends React.Component {
 				console.log('this causes is to call multiple times')
 
 				if(user != null) {
-
-					console.log(firebaseConfig.auth.currentUser, ' currentUser');
-
-					//firebase.database().ref('user-posts/' + myUserId)
       
 					user.updateProfile({
 						uid: firebaseConfig.auth.currentUser.uid,
@@ -73,16 +59,24 @@ class Autentication extends React.Component {
 					}).then(() => {
 
 						this.setState({
-							uid: firebaseConfig.auth.currentUser.uid
+							uid: firebaseConfig.auth.currentUser.uid,
+							userName: json.userName,
+							userPhoto: json.userPic
 						});
 
-						// const usersRef = firebaseConfig.database.ref('users/' + firebaseConfig.auth.currentUser.uid).push();
-						// usersRef.set({
-						// 	uid: firebaseConfig.auth.currentUser.uid,
-						// 	displayName: json.userName,
-						// 	photoURL: json.userPic
-						// })
+						const ref = Firebase.database().ref(`users/${firebaseConfig.auth.currentUser.uid}`);
 
+						ref.set({
+							uid: firebaseConfig.auth.currentUser.uid, 
+							displayName: json.userName,
+							photoURL: json.userPic
+						})
+						.then(() => {
+							console.log('Synchronization succeeded');
+						})
+						.catch(() => {
+							console.log('Synchronization failed');
+						})
 
 					});
 
@@ -101,7 +95,6 @@ class Autentication extends React.Component {
 
 	logout () {
 		firebaseConfig.auth.signOut().then(() =>{
-			console.log('success');
 			this.setState({ uid: null })
 		})
 	}
@@ -111,7 +104,6 @@ class Autentication extends React.Component {
 		return (
 			<nav className="login">
 				<p>Sign in to vote or submit a movie</p>
-				
 				<a href="https://slack.com/oauth/authorize?scope=identity.basic,identity.email,identity.team,identity.avatar&client_id=3992851480.155742621031"><img alt="Sign in with Slack" height="40" width="172" src="https://platform.slack-edge.com/img/sign_in_with_slack.png" srcSet="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x" /></a>
 			</nav>
 		)
@@ -124,7 +116,10 @@ class Autentication extends React.Component {
 		if(!this.state.uid) {
 			return <div>{this.renderLogin()}</div>
 		}else{
-			return <div>{logout}</div>
+			return <div>
+				Hello <img src={this.state.userPhoto} alt="user's slack picture" width="32px" height="32px" /> {this.state.userName} 
+				{logout}
+			</div>
 		}
 	}
 
