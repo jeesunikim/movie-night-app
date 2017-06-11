@@ -6,7 +6,26 @@ class ListMovie extends React.Component {
 	constructor () {
 		super();
 		this.upVote = this.upVote.bind(this);
+		this.toggleVote = this.toggleVote.bind(this);
 		this.firebaseRef = firebaseConfig.database.ref('/movies');
+	}
+
+	toggleVote(voteRef, uid) {
+		this.firebaseRef.transaction(function(post) {
+			if (post) {
+				if (this.firebaseRef.stars && this.firebaseRef.stars[uid]) {
+					this.firebaseRef.starCount--;
+					this.firebaseRef.stars[uid] = null;
+				} else {
+					this.firebaseRef.starCount++;
+					if (!this.firebaseRef.stars) {
+						this.firebaseRef.stars = {};
+					}
+					this.firebaseRef.stars[uid] = true;
+				}
+			}
+			return this.firebaseRef;
+		});
 	}
 
 	upVote (selectedMovie, index) {

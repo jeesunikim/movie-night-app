@@ -88,7 +88,7 @@ class App extends React.Component {
 				<div className="movie-night__wrapper">
 					<h2>What movie should we watch this month?</h2>
 					<AddMovieForm addMovie={this.addMovie} />
-					<ul className="movie-night__list-movies">
+					<ul className="movie-night__list">
 						{
 							Object.keys(this.state.movies)
 							.map(key => 
