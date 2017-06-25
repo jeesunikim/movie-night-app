@@ -14,7 +14,7 @@ const webpackConfig = require('./webpack.config.dev');
 const firebaseConfig = require('./firebase');
 
 // firebase admin
-const serviceAccount = require('./fb-movie-night-service-account.json');
+const serviceAccount = require('./fb-movie-night-firebase-adminsdk.json');
 const admin = require("firebase-admin");
 const adminConfig = {
    credential: admin.credential.cert(serviceAccount),
