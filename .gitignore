@@ -3,4 +3,3 @@ node_modules/
 .env
 npm-debug.log
 public/build
-fb-movie-night-service-account.json
