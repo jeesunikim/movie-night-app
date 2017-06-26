@@ -11,7 +11,7 @@ class App extends React.Component {
 	constructor () {
 		super();
 		this.addMovie = this.addMovie.bind(this);
-		this.updateMovie = this.updateMovie.bind(this);
+		this.upvoteMovie = this.upvoteMovie.bind(this);
 		this.removeMovie = this.removeMovie.bind(this);
 
 		this.firebaseRef = firebaseConfig.database.ref('/movies');
@@ -34,7 +34,7 @@ class App extends React.Component {
 
 
 
-		 }).bind(this);
+		}).bind(this);
 
 	}
 
@@ -54,16 +54,15 @@ class App extends React.Component {
 			desc: movie.desc,
 			imageUrl: movie.imageUrl,
 			likes: movie.likes,
-			name: movie.name
+			name: movie.name,
+			createdBy: firebaseConfig.auth.currentUser.uid
 		});
 	}
 
-	updateMovie (key, updatedVote) {
+	upvoteMovie (key, upvotedMovie) {
 		const movies = {...this.state.movies};
-		movies[key] = updatedVote;
+		movies[key] = upvotedMovie;
 		this.setState({movies});
-
-		console.log('updateMovie ', movies[key], updatedVote)
 	}
 
 	removeMovie (key) {
@@ -87,15 +86,10 @@ class App extends React.Component {
 		return (
 			<div className="movie-night">
 				<Authentication />
-				<div className="movie-night__authentication">
-					
-					<a href="https://slack.com/oauth/authorize?scope=identity.basic,identity.email,identity.team,identity.avatar&client_id=3992851480.155742621031"><img alt="Sign in with Slack" height="40" width="172" src="https://platform.slack-edge.com/img/sign_in_with_slack.png" srcSet="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x" /></a>
-
-				</div>
 				<div className="movie-night__wrapper">
 					<h2>What movie should we watch this month?</h2>
 					<AddMovieForm addMovie={this.addMovie} />
-					<ul className="movie-night__list-movies">
+					<ul className="movie-night__list">
 						{
 							Object.keys(this.state.movies)
 							.map(key => 
@@ -104,7 +98,7 @@ class App extends React.Component {
 									index={key}
 									movies={this.state.movies} 
 									details={this.state.movies[key]} 
-									updateMovie={this.updateMovie} 
+									upvoteMovie={this.upvoteMovie} 
 									removeMovie={this.removeMovie}
 								/>
 							)
