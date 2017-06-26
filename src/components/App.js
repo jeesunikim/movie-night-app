@@ -34,7 +34,7 @@ class App extends React.Component {
 
 
 
-		 }).bind(this);
+		}).bind(this);
 
 	}
 
@@ -54,7 +54,8 @@ class App extends React.Component {
 			desc: movie.desc,
 			imageUrl: movie.imageUrl,
 			likes: movie.likes,
-			name: movie.name
+			name: movie.name,
+			createdBy: firebaseConfig.auth.currentUser.uid
 		});
 	}
 

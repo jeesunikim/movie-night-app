@@ -17,14 +17,16 @@ class Autentication extends React.Component {
 			userPhoto: null
 		}
 
-		console.log(this.state.uid, ' this.state.uid')
-
 	}
 
 	componentDidMount() {
 		if(window.location.pathname === '/authenticated') {
 			this.authenticate();
-		};
+		}else{
+			firebaseConfig.auth.signOut().then(() =>{
+				this.setState({ uid: null })
+			})
+		}
 	}
 
 	authenticate () {
@@ -40,16 +42,31 @@ class Autentication extends React.Component {
 
 			console.log(json, ' json')
 
+
 			firebaseConfig.auth.signInWithCustomToken(json.firebaseToken).catch((error) => {
 				var errorCode = error.code;
 				var errorMessage = error.message;
 			});
 
-			firebaseConfig.auth.onAuthStateChanged((user) => {
+			const unsubscribe = firebaseConfig.auth.onAuthStateChanged((user) => {
 
-				console.log('this causes is to call multiple times')
+				unsubscribe();
 
-				if(user != null) {
+				if(user) {
+
+					const ref = Firebase.database().ref(`users/${firebaseConfig.auth.currentUser.uid}`);
+
+					ref.set({
+						uid: firebaseConfig.auth.currentUser.uid, 
+						displayName: json.userName,
+						photoURL: json.userPic
+					})
+					.then(() => {
+						console.log('Synchronization succeeded');
+					})
+					.catch(() => {
+						console.log('Synchronization failed');
+					})
       
 					user.updateProfile({
 						uid: firebaseConfig.auth.currentUser.uid,
@@ -64,33 +81,19 @@ class Autentication extends React.Component {
 							userPhoto: json.userPic
 						});
 
-						const ref = Firebase.database().ref(`users/${firebaseConfig.auth.currentUser.uid}`);
+						console.log(firebaseConfig.auth.currentUser.uid, ' firebaseConfig.auth.currentUser.uid')
 
-						ref.set({
-							uid: firebaseConfig.auth.currentUser.uid, 
-							displayName: json.userName,
-							photoURL: json.userPic
-						})
-						.then(() => {
-							console.log('Synchronization succeeded');
-						})
-						.catch(() => {
-							console.log('Synchronization failed');
-						})
+						// console.log(this.state.uid, ' this.state.uid')
 
+						
+
+
+						console.log(user, ' user')
 					});
-
-				} else {
-					console.log('user is not logged in. user == null ')
-				}
-			});
-
-		}).catch((err) => {
-
-			console.log(err, 'err');
+				};
+			});		
 
 		});
-
 	}
 
 	logout () {

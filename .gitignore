@@ -1,6 +1,6 @@
 node_modules/
-.DS_Store
+*.DS_Store
 .env
 npm-debug.log
 public/build
-fb-movie-night-service-account.json
+fb-movie-night-firebase-adminsdk.json

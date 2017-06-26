@@ -1,4 +1,5 @@
 import React from 'react';
+import Firebase from 'firebase';
 import firebaseConfig from '../../firebase';
 
 class ListMovie extends React.Component {
@@ -6,50 +7,35 @@ class ListMovie extends React.Component {
 	constructor () {
 		super();
 		this.upVote = this.upVote.bind(this);
-		this.toggleVote = this.toggleVote.bind(this);
 		this.firebaseRef = firebaseConfig.database.ref('/movies');
+		// console.log(this.props, ' this.props')
 	}
 
-	toggleVote(voteRef, uid) {
-		this.firebaseRef.transaction(function(post) {
-			if (post) {
-				if (this.firebaseRef.stars && this.firebaseRef.stars[uid]) {
-					this.firebaseRef.starCount--;
-					this.firebaseRef.stars[uid] = null;
-				} else {
-					this.firebaseRef.starCount++;
-					if (!this.firebaseRef.stars) {
-						this.firebaseRef.stars = {};
-					}
-					this.firebaseRef.stars[uid] = true;
-				}
-			}
-			return this.firebaseRef;
-		});
-	}
 
 	upVote (selectedMovie, index) {
 
-		if(firebaseConfig.auth.currentUser) {
+		const votesRef = Firebase.database().ref('movies/movie' + index + '/likes');
 
-			// this.firebaseRef.child('movie' + index + '/likes').set({
-			// 	userID: firebaseConfig.auth.currentUser.uid
-			// });
+		console.log(votesRef, ' votesRef')
 
-			console.log(selectedMovie, ' selectedMovie', index, ' index');
+		if(Firebase.auth().currentUser != null) {
 
-			console.log(firebaseConfig.auth.currentUser.uid, ' firebaseConfig.auth.currentUser');
+			votesRef.push({
+				"id": Firebase.auth().currentUser.uid
+			})
+
+			console.log(Firebase.auth().currentUser.uid, ' currentUser');
 
 			const movie = this.props.movies[index];
 
-			const upvoteMovie = {
-				...movie,
-				'likes': selectedMovie.details.likes += 1,
-			}
+			console.log(index, ' index', selectedMovie, ' selectedMovie')
 
-			console.log(index, upvoteMovie, ' index, upvoteMovie')
+			// const upvoteMovie = {
+			// 	...movie,
+			// 	'likes': selectedMovie.details.likes.push(Firebase.auth().currentUser),
+			// }
 
-			this.props.upvoteMovie(index, upvoteMovie);
+			// this.props.upvoteMovie(index, upvoteMovie);
 		}
 	}
 
@@ -57,14 +43,13 @@ class ListMovie extends React.Component {
 		
 		const { details, index } = this.props;
 		const removeButton = <button onClick={() => this.props.removeMovie(index)}>&times;</button>
-		const upVoteButton = <button onClick={() => this.upVote({details}, index)}>+1</button> 
+		const upVoteButton = <button onClick={() => this.upVote({details}, index)}>+1</button>
 
 		return (
 			
 			<li>
 				<img src={details.imageUrl} alt={details.name} />
 				{details.name} 
-				{details.likes} 
 				{details.desc}
 				{upVoteButton}
 				{removeButton}
