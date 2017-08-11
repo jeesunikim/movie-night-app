@@ -8,45 +8,41 @@ class ListMovie extends React.Component {
 		super();
 		this.upVote = this.upVote.bind(this);
 		this.firebaseRef = firebaseConfig.database.ref('/movies');
-		// console.log(this.props, ' this.props')
 	}
 
-
 	upVote (selectedMovie, index) {
-
-		const votesRef = Firebase.database().ref('movies/movie' + index + '/likes');
-
-		console.log(votesRef, ' votesRef')
+		const upvotesRef = Firebase.database().ref('movies/' + selectedMovie.details.key);
 
 		if(Firebase.auth().currentUser != null) {
+			function toggleVote(firebaseRef, uid) {
+				firebaseRef.transaction((post) => {
+					if (post) {
+						if(post.stars && post.stars[uid]) {
+							post.likes--;
+							post.stars[uid] = null;
+						}else{
+							post.likes++;
+							if (!post.stars) {
+					          post.stars = {};
+					        }
+					        post.stars[uid] = true;
+						}
+					}
+					return post;
+				});
+			}
 
-			votesRef.push({
-				"id": Firebase.auth().currentUser.uid
-			})
+			toggleVote(upvotesRef, Firebase.auth().currentUser.uid);
 
-			console.log(Firebase.auth().currentUser.uid, ' currentUser');
-
-			const movie = this.props.movies[index];
-
-			console.log(index, ' index', selectedMovie, ' selectedMovie')
-
-			// const upvoteMovie = {
-			// 	...movie,
-			// 	'likes': selectedMovie.details.likes.push(Firebase.auth().currentUser),
-			// }
-
-			// this.props.upvoteMovie(index, upvoteMovie);
 		}
 	}
 
 	render () {
-		
 		const { details, index } = this.props;
 		const removeButton = <button onClick={() => this.props.removeMovie(index)}>&times;</button>
 		const upVoteButton = <button onClick={() => this.upVote({details}, index)}>+1</button>
 
 		return (
-			
 			<li>
 				<img src={details.imageUrl} alt={details.name} />
 				{details.name} 
@@ -54,18 +50,9 @@ class ListMovie extends React.Component {
 				{upVoteButton}
 				{removeButton}
 			</li>
-
 		)
 	}
 
 };
-
-// ListMovie.propTypes = {
-// 	movies: React.PropTypes.object.isRequired,
-// 	details: React.PropTypes.object.isRequired,
-// 	index: React.PropTypes.string.isRequired,
-// 	removeMovie: React.PropTypes.func.isRequired
-
-// }
 
 export default ListMovie;
