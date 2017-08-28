@@ -1,0 +1,32 @@
+.carousel {
+  display: flex;
+  position: relative;
+  max-width: 1070px;
+  width: 100%;
+  overflow: hidden;
+  background-color: pink;
+  &.is-transition {
+    transition: transform 600ms ease;
+  }
+  &__item { 
+    margin: 7px;
+  }
+  &__btn {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    transform: translateY(-50%);
+    &.left {
+      left: 0;
+    }
+    &.right {
+      right: 0;
+    }
+  }
+  img {
+    width: 200px;
+    height: auto;
+    float: left;
+  }
+}
