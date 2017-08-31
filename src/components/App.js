@@ -68,7 +68,6 @@ class App extends React.Component {
 	}
 	
 	render () {
-		console.log(this.state.movies, ' this.state.movies')
 		return (
 			<div className="movie-night">
 				<Authentication />

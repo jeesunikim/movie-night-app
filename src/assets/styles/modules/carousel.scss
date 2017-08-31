@@ -5,8 +5,14 @@
   width: 100%;
   overflow: hidden;
   background-color: pink;
-  &.is-transition {
-    transition: transform 600ms ease;
+  &__items {
+    display: flex;
+    position: relative;
+    height: 350px;
+    flex: 1;
+    &.is-transition {
+      transition: transform 600ms ease;
+    }
   }
   &__item { 
     margin: 7px;
