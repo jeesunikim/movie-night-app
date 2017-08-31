@@ -1,0 +1,44 @@
+.carousel {
+  display: flex;
+  position: relative;
+  max-width: 1070px;
+  width: 100%;
+  overflow: hidden;
+  background-color: pink;
+  &__items {
+    display: flex;
+    position: relative;
+    height: 350px;
+    flex: 1;
+    &.is-transition {
+      transition: transform 600ms ease;
+    }
+  }
+  &__item { 
+    margin: 7px;
+  }
+  &__btn {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    transform: translateY(-50%);
+    &.left {
+      left: 0;
+    }
+    &.right {
+      right: 0;
+    }
+  }
+  img {
+    width: 200px;
+    height: auto;
+    float: left;
+    transform: scale(1.0);
+    transition: transform 180ms ease-in;
+    &.is-hovered {
+      transform: scale(1.1);
+      transition: transform 180ms ease-out;
+    }
+  }
+}

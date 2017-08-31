@@ -1,7 +1,7 @@
 import React from 'react';
 import AddMovieForm from './AddMovieForm';
 import ListMovie from './ListMovie';
-import sampleMovies from '../sample-movies';
+import Carousel from './Carousel';
 import Authentication from './Authentication';
 import firebaseConfig from '../../firebase';
 import * as firebase from 'firebase';
@@ -14,28 +14,21 @@ class App extends React.Component {
 		this.upvoteMovie = this.upvoteMovie.bind(this);
 		this.removeMovie = this.removeMovie.bind(this);
 
-		this.firebaseRef = firebaseConfig.database.ref('/movies');
-		this.movies = [];
-
 		// initial state
 		this.state = {
+			isLoaded: false,
 			movies: {}
 		};
-
 	}
 
-	componentDidMount () {
-
-		this.firebaseRef.on("child_added", (dataSnapshot) => {
-		    this.movies.push(dataSnapshot.val());
+	componentWillMount () {
+		this.firebaseRef = firebaseConfig.database.ref('/movies');
+		this.firebaseRef.on("value", (dataSnapshot) => {
 		    this.setState({
-		      movies: this.movies
+		      movies: dataSnapshot.val(),
+		      isLoaded: true
 		    });
-
-
-
 		}).bind(this);
-
 	}
 
 	componentWillUnmount () {
@@ -44,11 +37,7 @@ class App extends React.Component {
 
 	addMovie (movie) {
 		const movies = {...this.state.movies};
-
 		const newMovieRef = this.firebaseRef.push();
-		// const newMovieNumber = Object.keys(this.state.movies).length;
-
-		// movies[`movie${newMovieNumber}`] = movie;
 	
 		this.setState({movies});
 	
@@ -70,21 +59,20 @@ class App extends React.Component {
 
 	removeMovie (key) {
 		const movies = {...this.state.movies}
-
 		movies[key] = null;
-
 		this.setState({movies});
-
 		this.firebaseRef.child('movie' + key).remove();
-
-
 	}
 	
 	render () {
-
 		return (
 			<div className="movie-night">
 				<Authentication />
+				{this.state.isLoaded && 
+					<Carousel 
+						movies={this.state.movies} 
+					/>
+				}
 				<div className="movie-night__wrapper">
 					<h2>What movie should we watch this month?</h2>
 					<AddMovieForm addMovie={this.addMovie} />
