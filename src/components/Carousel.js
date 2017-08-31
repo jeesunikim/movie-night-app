@@ -8,13 +8,11 @@ class Carousel extends React.Component {
 
         this.onClickPrev = this.onClickPrev.bind(this);
         this.onClickNext = this.onClickNext.bind(this);
-        this.onHover = this.onHover.bind(this);
 
         this.state = {
             index: 0,
             initX: 0,
-            offsetX: 0,
-            hover: ""
+            offsetX: 0
         }
     }
 
@@ -36,10 +34,6 @@ class Carousel extends React.Component {
             index: nextIndex,
             offsetX: -214 * nextIndex
         })
-    }
-  
-    onHover(index) {
-      this.setState({ hover: index });
     }
 
     render() {
@@ -65,7 +59,7 @@ class Carousel extends React.Component {
                                 itsInitX={this.state.initX}
                                 itsIndex={this.state.index} 
                                 itsOffsetX={this.state.offsetX} 
-                                movie={this.props.movies[key]} 
+                                movie={this.props.movies[key]}
                                 key={key}
                             />
                         )
@@ -80,19 +74,41 @@ class Carousel extends React.Component {
     }
 }
 
-function CarouselSlide (props) {
-    const { movie, itsIndex } = props;
+class CarouselSlide extends React.Component {
+    constructor(props) {
+        super(props);
 
-    return (
-        <div 
-            className="carousel__item"
-            aria-hidden="false" 
-            aria-describedby={movie.name}
-        >
-            { movie.name }
-            <img src={movie.imageUrl} alt={movie.name}/>
-        </div>
-    )
+        this.mouseOver = this.mouseOver.bind(this);
+        this.mouseOut = this.mouseOut.bind(this);
+
+        this.state = {
+            isHovered: false
+        }
+    }
+
+    mouseOver() {
+        this.setState({ isHovered : true});
+        console.log('meow');
+    }
+
+    mouseOut(){
+        this.setState({ isHovered : false});
+    }
+
+    render() {
+        return (
+            <div 
+                className={`carousel__item ${this.state.isHovered ? 'meow' : 'rofl'}`}
+                aria-hidden="false" 
+                aria-describedby={this.props.movie.name}
+                onMouseOver={this.mouseOver}
+                onMouseOut={this.mouseOut}
+            >
+                { this.props.movie.name }
+                <img className={this.state.isHovered ? "is-hovered" : ""}src={this.props.movie.imageUrl} alt={this.props.movie.name}/>
+            </div>
+        )
+    }
 }
 
 function ArrowBtn (props) {

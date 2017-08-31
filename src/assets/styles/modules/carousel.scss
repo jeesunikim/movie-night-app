@@ -34,5 +34,11 @@
     width: 200px;
     height: auto;
     float: left;
+    transform: scale(1.0);
+    transition: transform 180ms ease-in;
+    &.is-hovered {
+      transform: scale(1.1);
+      transition: transform 180ms ease-out;
+    }
   }
 }

@@ -38,9 +38,6 @@ class App extends React.Component {
 	addMovie (movie) {
 		const movies = {...this.state.movies};
 		const newMovieRef = this.firebaseRef.push();
-		// const newMovieNumber = Object.keys(this.state.movies).length;
-
-		// movies[`movie${newMovieNumber}`] = movie;
 	
 		this.setState({movies});
 	
