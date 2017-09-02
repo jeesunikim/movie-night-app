@@ -1,0 +1,34 @@
+.carousel {
+  display: flex;
+  position: relative;
+  max-width: 1070px;
+  width: 100%;
+  overflow: hidden;
+  margin: 3% auto;
+  background-color: $gray;
+  &__items {
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 350px;
+    flex: 1;
+    &.is-transition {
+      transition: transform 600ms ease;
+    }
+  }
+  &__item { 
+    margin: 7px;
+  }
+  img {
+    cursor: pointer;
+    width: 200px;
+    height: auto;
+    float: left;
+    transform: scale(1.0);
+    transition: transform 180ms ease-in;
+    &.is-hovered {
+      transform: scale(1.1);
+      transition: transform 180ms ease-out;
+    }
+  }
+}

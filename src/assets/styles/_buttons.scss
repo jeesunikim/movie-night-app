@@ -1,0 +1,23 @@
+.button__delete {
+	width: 15px;
+	height: 15px;
+	display: none;
+}
+
+.button__upvote {
+	display: none;
+}
+
+.button__carousel {
+	display: block;
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    transform: translateY(-50%);
+    &--left {
+      left: 0;
+    }
+    &--right {
+      right: 0;
+    }
+}

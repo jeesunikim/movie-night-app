@@ -1,0 +1,63 @@
+.MovieApp__result {
+	@include font-regular;
+	text-align: center;
+	position: relative;
+	max-width: 600px;
+	width: 100%;
+	margin: 3% auto;
+
+	img {
+		width: 150px;
+	}
+
+	&-list {
+		list-style: none;
+		display: flex;
+		flex-flow: column wrap;
+		justify-content: center;
+		font-size: 14px;
+
+		li {
+			display: flex;
+			position: relative;
+			overflow: auto;
+			margin: 5px 0;
+			align-items: center;
+		}
+
+		span {
+			padding: 10px;
+			height: 40px;
+			line-height: 40px;
+			vertical-align: middle;
+
+		}
+
+		&-likes {
+			@include font-bold;
+			background-color: $red;
+			flex-basis: 40px;
+		}
+
+		.yellow {
+			background-color: yellow;
+			flex-basis: auto;
+		}
+
+		.red {
+			background-color: red;
+			flex-basis: 40px;
+		}
+
+		.blue {
+			background-color: blue;
+		}
+
+		.green {
+			background-color: green;
+			flex-basis: auto;
+			flex-grow: 2;
+		}
+	}
+
+};
