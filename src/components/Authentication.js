@@ -82,13 +82,6 @@ class Autentication extends React.Component {
 						});
 
 						console.log(firebaseConfig.auth.currentUser.uid, ' firebaseConfig.auth.currentUser.uid')
-
-						// console.log(this.state.uid, ' this.state.uid')
-
-						
-
-
-						console.log(user, ' user')
 					});
 				};
 			});		

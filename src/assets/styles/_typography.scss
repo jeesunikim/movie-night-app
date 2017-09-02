@@ -1,0 +1,30 @@
+@mixin font-bold() {
+	font-family: "aktiv-grotesk", Helvetica, Arial, sans-serif;
+	font-weight: 700;	
+}
+
+@mixin font-regular() {
+	font-family: "aktiv-grotesk", Helvetica, Arial, sans-serif;
+	font-weight: 400;
+}
+
+h1 {
+	@include font-bold;
+	font-size: 36px;
+}
+
+h2 {
+	@include font-bold;
+	font-size: 24px;
+	margin: 0;
+}
+
+p {
+	@include font-regular;
+	font-size: 14px;
+}
+
+.small {
+	@include font-regular;
+	font-size: 12px;	
+}

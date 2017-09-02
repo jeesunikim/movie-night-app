@@ -11,7 +11,7 @@ const extractSass = new ExtractTextPlugin({
 module.exports = {
 	devtool: "source-map",
 	context: path.resolve(__dirname, "src"),
-	entry: ["index.js", './assets/styles/app.scss'],
+	entry: ["index.js", './assets/styles/styles.scss'],
 	output: {
 		path: path.resolve(__dirname, "public/build"),
 		publicPath: "/build",

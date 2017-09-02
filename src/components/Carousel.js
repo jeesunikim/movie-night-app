@@ -52,8 +52,7 @@ class Carousel extends React.Component {
                     }}
                 >
                     {
-                        this.movies
-                        .map(key => 
+                        this.movies.map(key => 
                             <CarouselSlide
                                 movies={this.props.movies} 
                                 itsInitX={this.state.initX}
@@ -88,7 +87,6 @@ class CarouselSlide extends React.Component {
 
     mouseOver() {
         this.setState({ isHovered : true});
-        console.log('meow');
     }
 
     mouseOut(){
@@ -98,13 +96,12 @@ class CarouselSlide extends React.Component {
     render() {
         return (
             <div 
-                className={`carousel__item ${this.state.isHovered ? 'meow' : 'rofl'}`}
+                className="carousel__item"
                 aria-hidden="false" 
                 aria-describedby={this.props.movie.name}
                 onMouseOver={this.mouseOver}
                 onMouseOut={this.mouseOut}
             >
-                { this.props.movie.name }
                 <img className={this.state.isHovered ? "is-hovered" : ""}src={this.props.movie.imageUrl} alt={this.props.movie.name}/>
             </div>
         )
@@ -114,7 +111,7 @@ class CarouselSlide extends React.Component {
 function ArrowBtn (props) {
     return (
         <button 
-            className={`carousel__btn ${props.position}`}
+            className={`button__carousel button__carousel--${props.position}`}
             onClick={props.clickPosition}
         >
             {props.position}
