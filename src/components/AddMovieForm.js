@@ -81,7 +81,6 @@ class AddMovieForm extends React.Component {
 
 function ListFetchMovies (props) {
 	const { details, updateMovie } = props;
-	console.log(details.imdbID, 'details.imdbID');
 
 	return (
 		<li onClick={(evt) => updateMovie({details})}>

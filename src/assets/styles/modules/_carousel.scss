@@ -1,34 +1,73 @@
 .carousel {
-  display: flex;
+  background-color: $gray;
   position: relative;
+  display: flex;
   max-width: 1070px;
   width: 100%;
-  overflow: hidden;
   margin: 3% auto;
-  background-color: $gray;
+  overflow: hidden;
   &__items {
-    display: flex;
-    align-items: center;
     position: relative;
-    height: 350px;
+    display: flex;
     flex: 1;
+    align-items: center;
+    height: 420px;
     &.is-transition {
       transition: transform 600ms ease;
     }
   }
-  &__item { 
-    margin: 7px;
-  }
+  
   img {
+    position: relative;
     cursor: pointer;
     width: 200px;
     height: auto;
     float: left;
+    z-index: $z-carousel-image;
     transform: scale(1.0);
     transition: transform 180ms ease-in;
-    &.is-hovered {
-      transform: scale(1.1);
+  }
+}
+
+.carousel__item {
+  margin: 7px;
+  height: 287px;
+  overflow: hidden;
+  &-info {
+    background: black;
+    color: white;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    height: 60px;
+    width: 200px;
+    bottom: 0;
+    z-index: $z-carousel-info;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 180ms, opacity 180ms linear;
+    p {
+      position: relative;
+      flex-grow: 2;
+      flex-basis: auto;
+      bottom: 0;
+      padding-left: 10px;
+    }
+    button {
+      flex-basis: auto;
+      padding-right: 10px;
+    }
+  }
+
+  &.is-hovered {
+    overflow: unset;
+    img {
+      transform: scale(1.05);
       transition: transform 180ms ease-out;
+    }
+    .carousel__item-info {
+      visibility: visible;
+      opacity: 1;
     }
   }
 }
