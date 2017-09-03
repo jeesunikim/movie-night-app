@@ -4,13 +4,14 @@ import ListMovie from './ListMovie';
 import Carousel from './Carousel';
 import Authentication from './Authentication';
 import firebaseConfig from '../../firebase';
-import * as firebase from 'firebase';
+import Firebase from 'firebase';
 
 class App extends React.Component {
 	constructor () {
 		super();
 		this.addMovie = this.addMovie.bind(this);
 		this.removeMovie = this.removeMovie.bind(this);
+		this.upvoteMovie = this.upvoteMovie.bind(this);
 
 		// initial state
 		this.state = {
@@ -33,13 +34,38 @@ class App extends React.Component {
 		this.firebaseRef.off();
 	}
 
+	upvoteMovie(selectedMovie, index) {
+		const upvotesRef = Firebase.database().ref('movies/' + selectedMovie.movie.key);
+
+		if(Firebase.auth().currentUser != null) {
+			function toggleVote(firebaseRef, uid) {
+				firebaseRef.transaction((post) => {
+					if (post) {
+						if(post.stars && post.stars[uid]) {
+							post.likes--;
+							post.stars[uid] = null;
+						}else{
+							post.likes++;
+							if (!post.stars) {
+					          post.stars = {};
+					        }
+					        post.stars[uid] = true;
+						}
+					}
+					return post;
+				});
+			}
+			toggleVote(upvotesRef, Firebase.auth().currentUser.uid);
+		}
+	}
+
 	addMovie (movie) {
 		const movies = {...this.state.movies};
 		const newMovieRef = this.firebaseRef.push();
 	
 		this.setState({movies});
 
-		console.log(movie, ' movie')
+		console.log(movie, ' movie var in addMovie in App.js');
 	
 		newMovieRef.set({
 			imageUrl: movie.imageUrl,
@@ -65,11 +91,15 @@ class App extends React.Component {
 				<h1>Firstborn Movie Night</h1>
 				<AddMovieForm addMovie={this.addMovie} />
 				{this.state.isLoaded && 
-					<Carousel movies={this.state.movies} />
+					<Carousel 
+						movies={this.state.movies} 
+						upvoteMovie={this.upvoteMovie}
+					/>
 				}
 				{this.state.isLoaded && 
 					<ListMovie
-						movies={this.state.movies} 
+						movies={this.state.movies}
+						upvoteMovie={this.upvoteMovie}
 						removeMovie={this.removeMovie}
 					/>
 				}

@@ -11,6 +11,7 @@
 h1 {
 	@include font-bold;
 	font-size: 36px;
+	margin: 0;
 }
 
 h2 {
@@ -22,6 +23,7 @@ h2 {
 p {
 	@include font-regular;
 	font-size: 14px;
+	margin: 0;
 }
 
 .small {

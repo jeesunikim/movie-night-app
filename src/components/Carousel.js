@@ -54,12 +54,14 @@ class Carousel extends React.Component {
                     {
                         this.movies.map(key => 
                             <CarouselSlide
+                                key={key}
+                                index={key}
                                 movies={this.props.movies} 
                                 itsInitX={this.state.initX}
                                 itsIndex={this.state.index} 
                                 itsOffsetX={this.state.offsetX} 
                                 movie={this.props.movies[key]}
-                                key={key}
+                                upvoteMovie={this.props.upvoteMovie} 
                             />
                         )
                     }
@@ -94,15 +96,22 @@ class CarouselSlide extends React.Component {
     }
 
     render() {
+        const { movie, index } = this.props;
+        const UpvoteButton = <button className="button__upvote" onClick={() => this.props.upvoteMovie({movie}, index)}>+1</button>;
+
         return (
             <div 
-                className="carousel__item"
+                className={`carousel__item ${this.state.isHovered ? "is-hovered" : ""}`}
                 aria-hidden="false" 
                 aria-describedby={this.props.movie.name}
                 onMouseOver={this.mouseOver}
                 onMouseOut={this.mouseOut}
             >
-                <img className={this.state.isHovered ? "is-hovered" : ""}src={this.props.movie.imageUrl} alt={this.props.movie.name}/>
+                <img src={this.props.movie.imageUrl} alt={this.props.movie.name}/>
+                <div className="carousel__item-info">
+                    <p>{this.props.movie.name}</p>
+                    { UpvoteButton }
+                </div>
             </div>
         )
     }
