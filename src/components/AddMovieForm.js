@@ -30,7 +30,7 @@ class AddMovieForm extends React.Component {
 
 	search (query='') {
 		// debounce is needed
-		let url=`http://www.omdbapi.com/?s=${query}&apikey=e39c95bc&y=&r=json`;
+		const url=`http://www.omdbapi.com/?s=${query}&apikey=e39c95bc&y=&r=json`;
 
 	    fetch(url, {
 	    	method: 'GET'

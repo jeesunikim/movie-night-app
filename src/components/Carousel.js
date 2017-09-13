@@ -81,18 +81,27 @@ class CarouselSlide extends React.Component {
 
         this.mouseOver = this.mouseOver.bind(this);
         this.mouseOut = this.mouseOut.bind(this);
+        this.handleClick = this.handleClick.bind(this);
 
         this.state = {
-            isHovered: false
+            isHovered: false,
+            isModalOpen: false
         }
     }
 
     mouseOver() {
-        this.setState({ isHovered : true});
+        this.setState({ isHovered: true});
     }
 
     mouseOut(){
-        this.setState({ isHovered : false});
+        this.setState({ isHovered: false});
+    }
+
+    handleClick() {
+        console.log('handeClick', this.state.isModalOpen)
+        this.setState(prevState => ({
+            isModalOpen: !prevState.isModalOpen
+        }));
     }
 
     render() {
@@ -106,7 +115,8 @@ class CarouselSlide extends React.Component {
                 aria-describedby={this.props.movie.name}
                 onMouseOver={this.mouseOver}
                 onMouseOut={this.mouseOut}
-            >
+                onClick={this.handleClick}
+            >   
                 <img src={this.props.movie.imageUrl} alt={this.props.movie.name}/>
                 <div className="carousel__item-info">
                     <p>{this.props.movie.name}</p>
@@ -126,6 +136,29 @@ function ArrowBtn (props) {
             {props.position}
         </button>
     )
+}
+
+class CarouselModal extends React.Component {
+    constructor() {
+        super();
+
+        this.fetchMovieInfo = this.fetchMovieInfo.bind(this);
+
+    }
+
+    fetchMovieInfo (query='') {
+        const url=`http://www.omdbapi.com/?i=${query}&apikey=e39c95bc&plot=full`;
+
+        fetch(url, {
+            method: 'GET'
+        }).then((res) => {
+            return res.json();
+        }).then((json) => {
+            console.log(json, ' json');
+        }).catch((err) => {
+            console.log(err, ' err');
+        });
+    }
 }
 
 export default Carousel;

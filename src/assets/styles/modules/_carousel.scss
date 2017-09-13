@@ -34,8 +34,8 @@
   height: 287px;
   overflow: hidden;
   &-info {
-    background: black;
-    color: white;
+    background: $red;
+    color: $white;
     position: absolute;
     display: flex;
     align-items: center;
