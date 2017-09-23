@@ -8,14 +8,17 @@
 	font-weight: 400;
 }
 
-h1 {
+h1, h2, span.title {
 	@include font-bold;
+}
+
+h1 {
 	font-size: 36px;
+	text-align: center;
 	margin: 0;
 }
 
 h2 {
-	@include font-bold;
 	font-size: 24px;
 	margin: 0;
 }
