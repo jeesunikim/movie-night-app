@@ -14,10 +14,17 @@
     z-index: 1;
     top: 50%;
     transform: translateY(-50%);
+
     &--left {
       left: 0;
     }
+
     &--right {
       right: 0;
+    }
+
+    .has-open-jaw & {
+        top: 25%;
+        transform: translateY(-25%);   
     }
 }
