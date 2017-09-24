@@ -15,7 +15,7 @@ h1, h2, span.title {
 h1 {
 	font-size: 36px;
 	text-align: center;
-	margin: 0;
+	margin: 15px 0;
 }
 
 h2 {
@@ -29,7 +29,7 @@ p {
 	margin: 0;
 }
 
-.small {
+input, .small {
 	@include font-regular;
 	font-size: 12px;	
 }
