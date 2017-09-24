@@ -8,7 +8,8 @@ class AddMovieForm extends React.Component {
 		this.updateSearch = this.updateSearch.bind(this);
 		this.updateMovie = this.updateMovie.bind(this);
 		this.state = {
-			APImovies: {}
+			APImovies: {},
+			isSearching: false
 		}
 	}
 
@@ -29,20 +30,27 @@ class AddMovieForm extends React.Component {
 	}
 
 	search (query='') {
-		// debounce is needed
-		const url=`http://www.omdbapi.com/?s=${query}&apikey=e39c95bc&y=&r=json`;
+		// @TODO: debounce is needed
+		console.log(query, ' query')
 
-	    fetch(url, {
-	    	method: 'GET'
-	    }).then((res) => {
-    		return res.json();
-	    }).then((json) => {
-    		this.setState({
-    			APImovies: json.Search.slice(0,5)
-    		})
-	    }).catch((err) => {
-	    	console.log(err, 'err');
-	    });
+	    if(query === "") {
+	    	this.setState({ isSearching: false });
+	    }else{
+	    	const url=`http://www.omdbapi.com/?s=${query}&apikey=e39c95bc&y=&r=json`;
+	    	this.setState({ isSearching: true });
+
+	    	fetch(url, {
+		    	method: 'GET'
+		    }).then((res) => {
+	    		return res.json();
+		    }).then((json) => {
+	    		this.setState({
+	    			APImovies: json.Search.slice(0,5)
+	    		})
+		    }).catch((err) => {
+		    	console.log(err, 'err');
+		    });
+	    }
 	}
   
 	updateSearch(evt) {
@@ -50,6 +58,8 @@ class AddMovieForm extends React.Component {
 	}
 
 	updateMovie(url) {
+		this.setState({ isSearching: false });
+
 		const movieImgInput = document.getElementById('movieImgUrl');
 		const movieNameInput = document.getElementById('movieNameInput');
 		const imdbID = document.getElementById('imdbID');
@@ -68,12 +78,12 @@ class AddMovieForm extends React.Component {
 					<input ref={(input) => this.imageUrl = input } autoComplete="off" type="text" className="text-edit" id="movieImgUrl" placeholder="movie image" />
 					<button type="submit">Submit</button>
 				</form>
-				<ul className="MovieApp__form-dropdown">
+				<ul className={`MovieApp__form-dropdown ${this.state.isSearching ? 'is-searching' : ""}`}>
 					{
 						Object.keys(this.state.APImovies)
 						.map(key => <ListFetchMovies key={key} details={this.state.APImovies[key]} updateMovie={this.updateMovie} />)
 					}
-				</ul>		
+				</ul>
 			</div>
 		)
 	}
