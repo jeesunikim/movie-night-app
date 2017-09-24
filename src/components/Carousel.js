@@ -1,4 +1,5 @@
 import React from 'react';
+import CarouselJaw from 'CarouselJaw';
 
 const POSTER_WIDTH = 214;
 const TOTAL_LEGTH = 6;
@@ -69,15 +70,15 @@ class Carousel extends React.Component {
                     }}
                 >
                     {
-                        this.movies.map(key => 
+                        this.movies.map(uniqueID => 
                             <CarouselSlide
-                                key={key}
-                                index={key}
+                                key={uniqueID}
+                                index={uniqueID}
                                 movies={this.props.movies} 
                                 itsInitX={this.state.initX}
                                 itsIndex={this.state.index} 
                                 itsOffsetX={this.state.offsetX} 
-                                movie={this.props.movies[key]}
+                                movie={this.props.movies[uniqueID]}
                                 upvoteMovie={this.props.upvoteMovie} 
                                 onSelectMovie={this.getSelectedMovieID}
                             />
@@ -88,7 +89,7 @@ class Carousel extends React.Component {
                     position="right" 
                     clickPosition={this.onClickNext} 
                 />
-                <CarouselOpenJaw 
+                <CarouselJaw 
                     movie={this.state.selectedMovie}
                 />
             </div>
@@ -154,51 +155,6 @@ function ArrowBtn (props) {
             {props.position}
         </button>
     )
-}
-
-class CarouselOpenJaw extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.fetchMovieInfo = this.fetchMovieInfo.bind(this);
-
-        this.state = {
-            movieInfo: ""
-        }
-    }
-
-    componentWillReceiveProps(props) {
-        this.fetchMovieInfo(props.movie);
-    }
-
-    fetchMovieInfo (imdbID) {
-        const url=`http://www.omdbapi.com/?i=${imdbID}&apikey=e39c95bc&plot=full`;
-
-        fetch(url, {
-            method: 'GET'
-        }).then((res) => {
-            return res.json();
-        }).then((json) => {
-            console.log(json, ' json');
-            this.setState({ movieInfo: json });
-        }).catch((err) => {
-            console.log(err, ' err');
-        });
-    }
-
-    render() {
-        return (
-            <div className="carousel__jaw">
-                <div className="carousel__jaw-info">
-                    <span className="title">{this.state.movieInfo.Title}</span>
-                    <p>{this.state.movieInfo.Plot}</p>
-                </div>
-                <div className="carousel__jaw-image">
-                    <img src={this.state.movieInfo.Poster} alt={this.state.movieInfo.Title} />
-                </div>
-            </div>
-        )
-    }
 }
 
 export default Carousel;

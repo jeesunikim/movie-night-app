@@ -8,7 +8,20 @@
 	font-weight: 400;
 }
 
-h1, h2, span.title {
+h1, h2, .title {
+	@include font-bold;
+}
+
+p, span {
+	@include font-regular;
+	font-size: 14px;
+}
+
+.title {
+	font-size: 24px;
+}
+
+strong {
 	@include font-bold;
 }
 
@@ -31,5 +44,5 @@ p {
 
 input, .small {
 	@include font-regular;
-	font-size: 12px;	
+	font-size: 12px;
 }
