@@ -5,7 +5,36 @@
 }
 
 .button__upvote {
-	// waiting on design
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: block;
+    outline: none;
+    position: relative;
+    height: 100%;
+
+    svg {
+        display: inline-block;
+        fill: transparent;
+        stroke: $red;
+        stroke-width: 10px;
+        vertical-align: middle;
+        width: 45px;
+    }
+
+    .heart-icon{
+        transform-origin: 200px 50px;
+        transition: transform .3s ease-out;
+    }
+
+    &:hover {
+        svg {
+            fill: red;
+        }
+        .heart-icon {
+            transform : scale(1.3);
+        }
+    }
 }
 
 .button__carousel {
@@ -15,16 +44,59 @@
     top: 50%;
     transform: translateY(-50%);
 
-    &--left {
-      left: 0;
-    }
-
-    &--right {
-      right: 0;
-    }
-
     .has-open-jaw & {
         top: 25%;
         transform: translateY(-25%);   
+    }
+}
+
+.button__carousel--left, .button__carousel--right {
+    &:before {
+      position: absolute;
+      content: '';
+      display: block;
+      width: 10px;
+      height: 3px;
+      background: $white;
+    }
+}
+
+.button__carousel--left {
+    left: 0;
+
+    &:before {
+        -webkit-transform:rotate(-45deg);
+        -moz-transform:rotate(-45deg);
+        -ms-transform:rotate(-45deg);
+        -o-transform:rotate(-45deg);
+        transform:rotate(-45deg);
+    }
+
+    &:after {
+        -webkit-transform:rotate(45deg) translateX(-9px) translateY(-9px);
+        -moz-transform:rotate(45deg) translateX(-9px) translateY(-9px);
+        -ms-transform:rotate(45deg) translateX(-9px) translateY(-9px);
+        -o-transform:rotate(45deg) translateX(-9px) translateY(-9px);
+        transform:rotate(45deg) translateX(-9px) translateY(-9px);       
+    }
+}
+
+.button__carousel--right {
+    right: 0;
+
+    &:before {
+        -webkit-transform:rotate(45deg);
+        -moz-transform:rotate(45deg);
+        -ms-transform:rotate(45deg);
+        -o-transform:rotate(45deg);
+        transform:rotate(45deg);
+    }
+
+    &:after {
+        -webkit-transform:rotate(-45deg) translateX(9px) translateY(-9px);
+        -moz-transform:rotate(-45deg) translateX(9px) translateY(-9px);
+        -ms-transform:rotate(-45deg) translateX(9px) translateY(-9px);
+        -o-transform:rotate(-45deg) translateX(9px) translateY(-9px);
+        transform:rotate(-45deg) translateX(9px) translateY(-9px);
     }
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import CarouselJaw from 'CarouselJaw';
 
 const POSTER_WIDTH = 214;
-const TOTAL_LEGTH = 6;
+const TOTAL_LEGTH = 5;
 
 class Carousel extends React.Component {
     constructor(props) {
@@ -25,7 +25,7 @@ class Carousel extends React.Component {
 
     onClickPrev() {
         const { index } = this.state;
-        const previousIndex = index == 0 ? 0 : index - 1;
+        const previousIndex = index == 0 ? 0 : index - TOTAL_LEGTH;
         
         this.setState({
             index: previousIndex,
@@ -35,7 +35,7 @@ class Carousel extends React.Component {
 
     onClickNext() {
         const { index } = this.state;
-        const nextIndex = index + TOTAL_LEGTH === this.movies.length ? index : index + 1;
+        const nextIndex = index + TOTAL_LEGTH === this.movies.length ? index : index + TOTAL_LEGTH;
 
         this.setState({
             index: nextIndex,
@@ -125,7 +125,7 @@ class CarouselSlide extends React.Component {
 
     render() {
         const { movie, index } = this.props;
-        const UpvoteButton = <button className="button__upvote" onClick={() => this.props.upvoteMovie({movie}, index)}>+1</button>;
+        const UpvoteButton = <button className="button__upvote--white" onClick={() => this.props.upvoteMovie({movie}, index)}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -50 400 200"><path className="heart-icon" d="M251.5,45.5c0-17.8-11.1-34.6-28.9-34.6c-9,0-16.6,6.3-22.4,12.7c-5.7-6.3-13-12.7-21.8-12.7 c-17.8,0-29.9,16.8-29.9,34.6c0,24.7,37.2,51.1,52.4,51.1C217.5,96.6,251.5,67.7,251.5,45.5z"></path></svg></button>;
 
         return (
             <div 

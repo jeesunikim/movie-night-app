@@ -90,12 +90,14 @@ class App extends React.Component {
 				<Authentication />
 				<h1>Firstborn Movie Night</h1>
 				<AddMovieForm addMovie={this.addMovie} />
-				{this.state.isLoaded && 
-					<Carousel 
-						movies={this.state.movies} 
-						upvoteMovie={this.upvoteMovie}
-					/>
-				}
+				<div className="carousel__container">
+					{this.state.isLoaded && 
+						<Carousel 
+							movies={this.state.movies} 
+							upvoteMovie={this.upvoteMovie}
+						/>
+					}
+				</div>
 				{this.state.isLoaded && 
 					<ListMovie
 						movies={this.state.movies}

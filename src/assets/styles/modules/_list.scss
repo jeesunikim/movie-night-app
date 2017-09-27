@@ -9,7 +9,7 @@
 	}
 
 	&-list {
-		list-style: none;
+
 		max-width: 767px;
 		width: 100%;
 		display: flex;
@@ -48,8 +48,8 @@
 			padding: 10px 20px;
 		}
 
-		.red {
-			background-color: red;
+		&-upvote {
+			// background-color: red;
 			flex: 1 0 auto;
 			padding: 10px;
 		}

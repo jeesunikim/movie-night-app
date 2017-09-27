@@ -1,11 +1,31 @@
 .carousel {
-  background-color: $grey;
   position: relative;
   display: flex;
   // max-width: 1070px;
-  width: calc(100% - 140px);
-  margin: 3% auto;
+  width: calc(100% - 150px);
+  margin: 0 auto;
   overflow: hidden;
+  top: 50%;
+  transform: translateY(-50%);
+
+  &__container {
+    background-color: $grey;
+    background: url($grey-dark-texture);
+    height: 550px;
+    margin-top: 3%;
+    position: relative;
+
+    &:after {
+      content: "";
+    }
+  }
+
+  .button__upvote--white {
+    @extend .button__upvote;
+    svg {
+      stroke: $white;
+    }
+  }
 
   &__items {
     position: relative;
@@ -37,8 +57,14 @@
       display: flex;
       width: 100%;
       height: auto;
-      background-color: rgb(237, 218, 120);
+      background-color: $red;
       bottom: 0;
+      z-index: $z-carousel-info;
+      transform: translateY(30%);
+
+      &:after {
+        content: "";
+      }
 
       & > div {
         padding: 3%;
@@ -46,6 +72,10 @@
 
       &-info {
         flex-grow: 2;
+      }
+
+      .title {
+        line-height: 2;
       }
 
       &-rating {
@@ -56,6 +86,7 @@
 
         span:not(.rating) {
           margin: 5px 0;
+          line-height: 2;
         }
       }
 
@@ -66,6 +97,10 @@
 
       span {
         display: block;
+      }
+
+      p {
+        line-height: 20px;
       }
 
       ul {
@@ -101,11 +136,11 @@
       }
 
       .path {
-        stroke: $light-grey;
+        stroke: $grey-light;
       }
 
       .path--active {
-        stroke: $red;
+        stroke: $black;
         animation: dash 800ms linear forwards;
       }
     }

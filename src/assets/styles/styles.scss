@@ -1,3 +1,4 @@
+@import 'reset';
 @import 'variables';
 @import 'typography';
 @import 'buttons';
@@ -5,6 +6,11 @@
 @import 'modules/list';
 @import 'modules/form';
 @import 'modules/carousel';
+
+body {
+	background-color: $grey-light;
+	background: url($grey-light-texture);
+}
 
 main {
 	margin: 0 auto;
