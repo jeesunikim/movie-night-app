@@ -24,7 +24,6 @@ class CarouselJaw extends React.Component {
             return res.json();
         }).then((json) => {
             this.setState({ movieInfo: json });
-            console.log(this.state.movieInfo);
         }).catch((err) => {
             console.log(err, ' err');
         });

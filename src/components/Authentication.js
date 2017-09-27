@@ -54,34 +54,23 @@ class Autentication extends React.Component {
 
 				if(user) {
 
-					const ref = Firebase.database().ref(`users/${firebaseConfig.auth.currentUser.uid}`);
+					const userRef = firebaseConfig.database.ref("/users/" + firebaseConfig.auth.currentUser.uid);
 
-					ref.set({
-						uid: firebaseConfig.auth.currentUser.uid, 
-						displayName: json.userName,
+					// userRef.push();
+
+					userRef.set({
+						username: json.userName,
 						photoURL: json.userPic
-					})
-					.then(() => {
+					}).then(() =>{
 						console.log('Synchronization succeeded');
-					})
-					.catch(() => {
+					}).catch(() => {
 						console.log('Synchronization failed');
-					})
-      
-					user.updateProfile({
+					});	
+
+					this.setState({
 						uid: firebaseConfig.auth.currentUser.uid,
-						displayName: json.userName,
-						photoURL: json.userPic
-
-					}).then(() => {
-
-						this.setState({
-							uid: firebaseConfig.auth.currentUser.uid,
-							userName: json.userName,
-							userPhoto: json.userPic
-						});
-
-						console.log(firebaseConfig.auth.currentUser.uid, ' firebaseConfig.auth.currentUser.uid')
+						userName: json.userName,
+						userPhoto: json.userPic
 					});
 				};
 			});		

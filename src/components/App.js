@@ -39,20 +39,20 @@ class App extends React.Component {
 
 		if(Firebase.auth().currentUser != null) {
 			function toggleVote(firebaseRef, uid) {
-				firebaseRef.transaction((post) => {
-					if (post) {
-						if(post.stars && post.stars[uid]) {
-							post.likes--;
-							post.stars[uid] = null;
+				firebaseRef.transaction((movie) => {
+					if (movie) {
+						if(movie.stars && movie.stars[uid]) {
+							movie.likes--;
+							movie.stars[uid] = null;
 						}else{
-							post.likes++;
-							if (!post.stars) {
-					          post.stars = {};
+							movie.likes++;
+							if (!movie.stars) {
+					          movie.stars = {};
 					        }
-					        post.stars[uid] = true;
+					        movie.stars[uid] = true;
 						}
 					}
-					return post;
+					return movie;
 				});
 			}
 			toggleVote(upvotesRef, Firebase.auth().currentUser.uid);
