@@ -5,6 +5,7 @@ class CarouselJaw extends React.Component {
         super(props);
 
         this.fetchMovieInfo = this.fetchMovieInfo.bind(this);
+        // this.clickClose = this.clickClose.bind(this);
 
         this.state = {
             movieInfo: ""
@@ -14,6 +15,20 @@ class CarouselJaw extends React.Component {
     componentWillReceiveProps(props) {
         this.fetchMovieInfo(props.movie);
     }
+
+    // shouldComponentUpdate(nextProps, nextState) {
+
+    //     if(nextProps.movie !== nextState.movieInfo.imdbID) {
+    //         return true;
+    //         console.log('shouldComponentUpdate', nextProps.movie, nextState);
+    //     }
+    //     return false;
+    // }
+
+    // componentWillUpdate (prop) {
+    //     prop.onClickClose();
+    //     console.log(prop, ' prop')
+    // }
 
     fetchMovieInfo (imdbID) {
         const url=`http://www.omdbapi.com/?i=${imdbID}&apikey=e39c95bc&plot=full`;
@@ -29,9 +44,14 @@ class CarouselJaw extends React.Component {
         });
     }
 
+    // handleClick() {
+    //     this.props.isMovieSelected;
+    // }
+
     render() {
         return (
             <div className="carousel__jaw">
+                <span onClick={this.props.onClickClose} className="button__x"></span>
                 <div className="carousel__jaw-info">
                     <span className="title">{this.state.movieInfo.Title}</span>
                     <p>{this.state.movieInfo.Plot}</p>

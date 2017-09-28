@@ -16,16 +16,9 @@ class ListMovie extends React.Component {
 		// this.getAvatar();
 	}
 
-	componentWillMount () {
+	componentDidMount() {
+
 	}
-
-	// getAvatar () {
-		// this.movies.map(key => console.log(this.props.movies[key].stars));
-
-		// console.log(this.props.movies, ' Object.keys(movie.stars)');
-		// console.log(firebaseConfig.database.ref("/users/"));
-	// }
-
 
 	render () {
 		return (
@@ -53,63 +46,50 @@ class ListMovie extends React.Component {
 };
 
 function getAvatar (uid) {
+	
 	let avatarArray = [];
 
-	if(uid.length > 1) {
-		uid.forEach(eachUID => {
-			console.log(eachUID, ' eachUID')
-			// firebaseConfig.database.ref("/users/" + eachUID).once("value").then((snapshot) => {	
-				// return (<img src={ snapshot.photoURL } alt={ snapshot.username } />)
-				// console.log(snapshot.photoURL , ' snapshot')
-			// })
-		})
-	}else{
-		console.log(uid[0], ' uid')
-		firebaseConfig.database.ref("/users/" + uid[0]).once("value").then((snapshot) => {
-			if(snapshot.val() !== null) {
-				console.log(snapshot.val().photoURL , ' snapshot')	
-				return snapshot.val().photoURL;
-				// return (<span><img src={ snapshot.val().photoURL } alt={ snapshot.val().username } />hi</span>)
-			}
-			
-		})
-	}
-	// console.log(breakUID, ' breakUID');
-	
-	if(uid) {
+	let result;
 
-		// firebaseConfig.database.ref("/users/" + breakUID).once("value").then((snapshot) => {
-		// 	avatarArray.push(snapshot.val().photoURL);
-		// 	console.log(avatarArray, ' avatarArray')
+	// try{
+		// return <span>meow</span>
+		// if(uid.length > 1) {
+		// 	uid.forEach(eachUID => {
+		// 		console.log(eachUID, ' eachUID')
+		// 		firebaseConfig.database.ref("/users/" + eachUID).once("value").then((snapshot) => {	
+		// 			avatarArray.push(snapshot.val().photoURL);
+		// 			console.log(avatarArray, ' avatarArray in length > 1')
+		// 		})
+		// 	})
+		// }else{
+		// 	console.log(uid[0], ' uid')
+			firebaseConfig.database.ref("/users/" + uid[0]).once("value").then((snapshot) => {
+				if(snapshot.val() !== null) {
+					
+					result = snapshot.val().photoURL;
+					console.log(result, ' result')
 
-		// 	return (
-		// 		avatarArray.forEach(ele => <img src={ele.photoURL} alt={ele.username} />)
-				
-		// 	)
-		// });
-	}
-	// return ( <img src={snapshot.val().photoURL} alt={snapshot.val().username} /> )
+					return "result";
+				}	
+			})
+		// }
+		return uid[0];
+
+
 }
 
 function MovieAppList (props) {
 
 	const { movie, index } = props;
 
-	// try{
-	// 	getAvatar(Object.keys(movie.stars));
-	// }catch(e){
-	// 	let allKeys = Object.getOwnPropertyNames(e);
-	// 	console.log(allKeys); 
-	// }
-
-	const UpvoteButton = <button className="button__upvote" onClick={() => props.upvoteMovie({movie}, index)}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -50 400 200">
+	const UpvoteButton = <button className="button__upvote" onClick={() => props.upvoteMovie({movie}, index)}><svg xmlns="http://www.w3.org/2000/svg" viewBox="100 -30 190 150">
 			<path className="heart-icon" d="M251.5,45.5c0-17.8-11.1-34.6-28.9-34.6c-9,0-16.6,6.3-22.4,12.7c-5.7-6.3-13-12.7-21.8-12.7 c-17.8,0-29.9,16.8-29.9,34.6c0,24.7,37.2,51.1,52.4,51.1C217.5,96.6,251.5,67.7,251.5,45.5z"></path></svg></button>;
 	const RemoveButton = <button className="button__delete" onClick={() => props.removeMovie(index)}>&times;</button>;
-	const likedUsers = movie.stars ? <span className="green">{ getAvatar(Object.keys(movie.stars)) }</span> : <span className="green">meow</span>;
+	const likedUsers = movie.stars ? <span className="MovieApp__result-list-avatars">{ getAvatar(Object.keys(movie.stars)) }</span> : <span className="MovieApp__result-list-avatars">empty</span>;
 
 	return (
 		<li>
-			<span className="yellow">{ movie.name }</span>
+			<span className="MovieApp__result-list-title">{ movie.name }</span>
 			<span className="MovieApp__result-list-likes">{ movie.likes }</span>
 			{ likedUsers }
 			<span className="MovieApp__result-list-upvote">{ UpvoteButton }</span>

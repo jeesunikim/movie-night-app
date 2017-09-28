@@ -12,6 +12,10 @@ class Carousel extends React.Component {
 
         this.onClickPrev = this.onClickPrev.bind(this);
         this.onClickNext = this.onClickNext.bind(this);
+        this.onClickClose = this.onClickClose.bind(this);
+        this.mouseOver = this.mouseOver.bind(this);
+        this.mouseOut = this.mouseOut.bind(this);
+
         this.getSelectedMovieID = this.getSelectedMovieID.bind(this);
 
         this.state = {
@@ -19,7 +23,8 @@ class Carousel extends React.Component {
             initX: 0,
             offsetX: 0,
             selectedMovie: "",
-            isSelectedMovieOn: false
+            isSelectedMovieOn: false,
+            isHovered: false
         }
     }
 
@@ -43,6 +48,14 @@ class Carousel extends React.Component {
         })
     }
 
+    mouseOver() {
+        this.setState({ isHovered: true });
+    }
+
+    mouseOut(){
+        this.setState({ isHovered: false });
+    }
+
     getSelectedMovieID(selectedMovieValue) {
         this.setState({ 
             selectedMovie: selectedMovieValue,
@@ -54,10 +67,18 @@ class Carousel extends React.Component {
         // https://stackoverflow.com/questions/37847028/react-setstate-not-working-on-first-try-but-works-on-second
     }
 
+    onClickClose() {
+        this.setState({ isSelectedMovieOn: false });
+    }
+
     render() {
         
         return (
-            <div className={`carousel ${this.state.isSelectedMovieOn ? "has-open-jaw" : ""}`}>
+            <div 
+                className={`carousel ${this.state.isSelectedMovieOn ? "has-open-jaw" : ""} ${this.state.isHovered ? "is-hovered" : ""}`} 
+                onMouseOver={this.mouseOver}
+                onMouseOut={this.mouseOut}
+            >
                 <ArrowBtn 
                     position="left" 
                     clickPosition={this.onClickPrev} 
@@ -91,6 +112,7 @@ class Carousel extends React.Component {
                 />
                 <CarouselJaw 
                     movie={this.state.selectedMovie}
+                    onClickClose={this.onClickClose}
                 />
             </div>
         )
@@ -125,7 +147,7 @@ class CarouselSlide extends React.Component {
 
     render() {
         const { movie, index } = this.props;
-        const UpvoteButton = <button className="button__upvote--white" onClick={() => this.props.upvoteMovie({movie}, index)}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -50 400 200"><path className="heart-icon" d="M251.5,45.5c0-17.8-11.1-34.6-28.9-34.6c-9,0-16.6,6.3-22.4,12.7c-5.7-6.3-13-12.7-21.8-12.7 c-17.8,0-29.9,16.8-29.9,34.6c0,24.7,37.2,51.1,52.4,51.1C217.5,96.6,251.5,67.7,251.5,45.5z"></path></svg></button>;
+        const UpvoteButton = <button className="button__upvote--white" onClick={() => this.props.upvoteMovie({movie}, index)}><svg xmlns="http://www.w3.org/2000/svg" viewBox="100 -30 190 150"><path className="heart-icon" d="M251.5,45.5c0-17.8-11.1-34.6-28.9-34.6c-9,0-16.6,6.3-22.4,12.7c-5.7-6.3-13-12.7-21.8-12.7 c-17.8,0-29.9,16.8-29.9,34.6c0,24.7,37.2,51.1,52.4,51.1C217.5,96.6,251.5,67.7,251.5,45.5z"></path></svg></button>;
 
         return (
             <div 
@@ -148,12 +170,14 @@ class CarouselSlide extends React.Component {
 
 function ArrowBtn (props) {
     return (
-        <button 
-            className={`button__carousel button__carousel--${props.position}`}
+        <span 
+            className={`button__carousel-container button__carousel-container--${props.position}`}
             onClick={props.clickPosition}
         >
-            {props.position}
-        </button>
+            <button 
+                className="button__carousel"
+            ></button>
+        </span>
     )
 }
 
