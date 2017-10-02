@@ -61,6 +61,7 @@
 		}
 
 		&-avatars {
+			display: flex;
 			position: relative;
 			flex: 0 0 auto;
 			width: 350px;
@@ -68,7 +69,7 @@
 		}
 
 		img {
-			position: absolute;
+			position: relative;
 			display: inline-block;
 			top: 0;
 			bottom: 0;

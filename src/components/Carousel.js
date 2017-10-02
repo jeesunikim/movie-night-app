@@ -40,7 +40,7 @@ class Carousel extends React.Component {
 
     onClickNext() {
         const { index } = this.state;
-        const nextIndex = index + TOTAL_LEGTH === this.movies.length ? index : index + TOTAL_LEGTH;
+        const nextIndex = index + TOTAL_LEGTH > this.movies.length ? index : index + TOTAL_LEGTH;
 
         this.setState({
             index: nextIndex,

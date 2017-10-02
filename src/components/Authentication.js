@@ -22,11 +22,13 @@ class Autentication extends React.Component {
 	componentDidMount() {
 		if(window.location.pathname === '/authenticated') {
 			this.authenticate();
-		}else{
-			firebaseConfig.auth.signOut().then(() =>{
-				this.setState({ uid: null })
-			})
 		}
+	}
+
+	componentWillUnmount() {
+		firebaseConfig.auth.signOut().then(() =>{
+			this.setState({ uid: null })
+		})
 	}
 
 	authenticate () {
@@ -99,12 +101,19 @@ class Autentication extends React.Component {
 
 		// check if they are logged in
 		if(!this.state.uid) {
-			return <div>{this.renderLogin()}</div>
+			return (
+				<div className="MovieApp__authentication">
+					<span>{this.renderLogin()}</span>
+				</div>
+			)
 		}else{
-			return <div>
-				Hello <img src={this.state.userPhoto} alt="user's slack picture" width="32px" height="32px" /> {this.state.userName} 
-				{logout}
-			</div>
+			return (
+				<div className="MovieApp__authentication">
+					<span>Hello <strong>{this.state.userName}</strong></span>
+					<img className="avatar_image" src={this.state.userPhoto} alt="user's slack picture" width="32px" height="32px" />
+					{logout}
+				</div>
+			)
 		}
 	}
 

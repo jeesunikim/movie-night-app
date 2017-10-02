@@ -25,6 +25,9 @@
 
   .button__upvote--white {
     @extend .button__upvote;
+    height: auto;
+    display: inline-block;
+    
     svg {
       stroke: $white;
     }

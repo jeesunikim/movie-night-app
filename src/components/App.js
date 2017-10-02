@@ -12,26 +12,42 @@ class App extends React.Component {
 		this.addMovie = this.addMovie.bind(this);
 		this.removeMovie = this.removeMovie.bind(this);
 		this.upvoteMovie = this.upvoteMovie.bind(this);
+		this.getData = this.getData.bind(this);
+
+		this.firebaseRef = firebaseConfig.database.ref('/movies');
 
 		// initial state
 		this.state = {
 			isLoaded: false,
-			movies: {}
+			movies: {},
+			isAdded: false
 		};
 	}
 
 	componentWillMount () {
-		this.firebaseRef = firebaseConfig.database.ref('/movies');
+		this.getData();
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+	  if (Object.keys(this.state.movies) > Object.keys(prevState.movies)) {
+	    this.getData();  
+	  }
+	}
+
+	getData () {
 		this.firebaseRef.on("value", (dataSnapshot) => {
 		    this.setState({
 		      movies: dataSnapshot.val(),
 		      isLoaded: true
 		    });
-		}).bind(this);
+		    console.log(this.state.movies);
+		    console.log(Object.keys(this.state.movies));
+		});
 	}
 
 	componentWillUnmount () {
 		this.firebaseRef.off();
+		this.setState({ isLoaded: false })
 	}
 
 	upvoteMovie(selectedMovie, index) {
@@ -63,10 +79,6 @@ class App extends React.Component {
 		const movies = {...this.state.movies};
 		const newMovieRef = this.firebaseRef.push();
 	
-		this.setState({movies});
-
-		console.log(movie, ' movie var in addMovie in App.js');
-	
 		newMovieRef.set({
 			imageUrl: movie.imageUrl,
 			imdbID: movie.imdbID,
@@ -74,7 +86,9 @@ class App extends React.Component {
 			name: movie.name,
 			createdBy: firebaseConfig.auth.currentUser.uid,
 			key: newMovieRef.key
-		});
+		}).then(() => {
+			this.setState({ movies: movies });
+		})
 	}
 
 	removeMovie (key) {
@@ -92,7 +106,7 @@ class App extends React.Component {
 				<AddMovieForm addMovie={this.addMovie} />
 				<div className="carousel__container">
 					{this.state.isLoaded && 
-						<Carousel 
+						<Carousel
 							movies={this.state.movies} 
 							upvoteMovie={this.upvoteMovie}
 						/>

@@ -12,11 +12,7 @@ class AddMovieForm extends React.Component {
 			isSearching: false
 		}
 	}
-
-	componentWillUpdate () {
-
-	}
-
+	
 	submitMovie (event) {
 		event.preventDefault()
 		const movie = {
@@ -31,7 +27,6 @@ class AddMovieForm extends React.Component {
 
 	search (query='') {
 		// @TODO: debounce is needed
-		console.log(query, ' query')
 
 	    if(query === "") {
 	    	this.setState({ isSearching: false });
@@ -75,7 +70,7 @@ class AddMovieForm extends React.Component {
 				<form ref={(input) => this.movieForm=input} onSubmit={(e) => this.submitMovie(e)}>
 					<input ref={(input) => this.name = input } autoComplete="off" type="text" className="text-edit" placeholder="movie name...." id="movieNameInput" onChange={ (e) => this.updateSearch(e) } />
 					<input ref={(input) => this.imdb = input } autoComplete="off" type="text" className="text-edit hidden" placeholder="imdb id" id="imdbID" />
-					<input ref={(input) => this.imageUrl = input } autoComplete="off" type="text" className="text-edit" id="movieImgUrl" placeholder="movie image" />
+					<input ref={(input) => this.imageUrl = input } autoComplete="off" type="text" className="text-edit hidden" id="movieImgUrl" placeholder="movie image" />
 					<button type="submit">Submit</button>
 				</form>
 				<ul className={`MovieApp__form-dropdown ${this.state.isSearching ? 'is-searching' : ""}`}>
