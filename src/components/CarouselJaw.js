@@ -24,7 +24,6 @@ class CarouselJaw extends React.Component {
             return res.json();
         }).then((json) => {
             this.setState({ movieInfo: json });
-            console.log(this.state.movieInfo);
         }).catch((err) => {
             console.log(err, ' err');
         });
@@ -33,6 +32,7 @@ class CarouselJaw extends React.Component {
     render() {
         return (
             <div className="carousel__jaw">
+                <span onClick={this.props.onClickClose} className="button__x"></span>
                 <div className="carousel__jaw-info">
                     <span className="title">{this.state.movieInfo.Title}</span>
                     <p>{this.state.movieInfo.Plot}</p>

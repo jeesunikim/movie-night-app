@@ -4,27 +4,164 @@
 	display: none;
 }
 
+.button__x {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    top: 18px;
+    right: 18px;
+    cursor: pointer;
+
+    &:before, &:after {
+        content: "";
+        position: absolute;
+        width: 2px;
+        height: 25px;
+        left: 15px;
+        background-color: $black;
+        transition: background-color 200ms ease-in-out;
+    }
+
+    &:before { transform: rotate(45deg); }
+
+    &:after { transform: rotate(-45deg); }
+
+    &:hover {
+        &:before, &:after {
+            background-color: $white;
+        }
+    }
+}
+
 .button__upvote {
-	// waiting on design
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: block;
+    outline: none;
+    position: relative;
+    height: 100%;
+
+    svg {
+        display: inline-block;
+        fill: transparent;
+        stroke: $red;
+        stroke-width: 10px;
+        vertical-align: middle;
+        width: 25px;
+    }
+
+    .heart-icon{
+        transform-origin: 200px 50px;
+        transition: transform .3s ease-out;
+    }
+
+    &:hover {
+        svg {
+            fill: red;
+        }
+        .heart-icon {
+            transform : scale(1.3);
+        }
+    }
 }
 
 .button__carousel {
+    background: transparent;
+    border: none;
 	display: block;
     position: absolute;
-    z-index: 1;
+    z-index: $z-carousel-button;
     top: 50%;
     transform: translateY(-50%);
 
-    &--left {
-      left: 0;
-    }
-
-    &--right {
-      right: 0;
+    &:before, &:after {
+      position: absolute;
+      content: '';
+      display: block;
+      width: 20px;
+      height: 3px;
+      background: $white;
     }
 
     .has-open-jaw & {
-        top: 25%;
-        transform: translateY(-25%);   
+        // top: 25%;
+        // transform: translateY(-25%);   
+    }
+}
+
+.button__carousel-container {
+    // position: static;
+    position: absolute;
+    cursor: pointer;
+    // padding: 5px 0;
+    // top: 8%;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 287px;
+    width: 50px;
+    opacity: 0;
+    z-index: $z-carousel-button-container;
+    background: $black;
+    transition: opacity 400ms ease-in-out;
+
+    .button__carousel {
+        cursor: pointer;
+        outline: none;
+    }
+
+    &--left {
+        left: 0;
+        background: -webkit-linear-gradient(90deg, $black, transparent);
+        background: -o-linear-gradient(90deg, $black, transparent);
+        background: -moz-linear-gradient(90deg, $black, transparent);
+        background: linear-gradient(90deg, $black, transparent);
+
+        .button__carousel {
+            &:before {
+                -webkit-transform:rotate(45deg);
+                -moz-transform:rotate(45deg);
+                -ms-transform:rotate(45deg);
+                -o-transform:rotate(45deg);
+                transform:rotate(45deg);
+            }
+
+            &:after {
+                -webkit-transform:rotate(-45deg) translateX(9px) translateY(-9px);
+                -moz-transform:rotate(-45deg) translateX(9px) translateY(-9px);
+                -ms-transform:rotate(-45deg) translateX(9px) translateY(-9px);
+                -o-transform:rotate(-45deg) translateX(9px) translateY(-9px);
+                transform:rotate(-45deg) translateX(9px) translateY(-9px);
+            }
+        }
+    }
+
+    &--right {
+        right: 0;
+        background: -webkit-linear-gradient(-90deg, $black, transparent);
+        background: -o-linear-gradient(-90deg, $black, transparent);
+        background: -moz-linear-gradient(-90deg, $black, transparent);
+        background: linear-gradient(-90deg, $black, transparent);
+
+        .button__carousel {
+            right: 15px;
+
+            &:before {
+                -webkit-transform:rotate(-45deg);
+                -moz-transform:rotate(-45deg);
+                -ms-transform:rotate(-45deg);
+                -o-transform:rotate(-45deg);
+                transform:rotate(-45deg);
+            }
+
+            &:after {
+                -webkit-transform:rotate(45deg) translateX(-9px) translateY(-9px);
+                -moz-transform:rotate(45deg) translateX(-9px) translateY(-9px);
+                -ms-transform:rotate(45deg) translateX(-9px) translateY(-9px);
+                -o-transform:rotate(45deg) translateX(-9px) translateY(-9px);
+                transform:rotate(45deg) translateX(-9px) translateY(-9px);       
+            }
+        }
+
     }
 }

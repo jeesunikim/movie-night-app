@@ -1,9 +1,17 @@
+$black: #000000;
 $white: #ffffff;
 $red: #ee2024;
-$light-grey: #e6e6e6;
-$grey: #2b2b2b;
+$grey-light: #f5f5f5;
+$grey: #2c2c2c;
+
+// Color Texture
+$grey-texture: 'https://www.firstborn.com/assets/images/global/texture.black.jpg';
+$grey-light-texture: 'https://www.firstborn.com/assets/images/global/texture.grey.png';
+$grey-dark-texture: 'https://www.firstborn.com/assets/images/page/work/background-pattern.jpg';
 
 // To more easily manage our z-indexes we're defining them one by one.
 $z-search-menu: 4;
 $z-carousel-image: 3;
-$z-carousel-info: 2;
+$z-carousel-info: 10;
+$z-carousel-button-container: 12;
+$z-carousel-button: 15;

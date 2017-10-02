@@ -5,16 +5,15 @@
 	width: 100%;
 
 	img {
-		width: 150px;
+		width: 32px;
 	}
 
 	&-list {
-		list-style: none;
-		max-width: 600px;
+
+		max-width: 767px;
 		width: 100%;
 		display: flex;
 		flex-flow: column wrap;
-		justify-content: center;
 		font-size: 14px;
 		margin: 1.5% auto;
 		padding: 0;
@@ -22,13 +21,13 @@
 		li {
 			display: flex;
 			position: relative;
-			overflow: auto;
+			overflow: hidden;
 			margin: 5px 0;
-			align-items: center;
+			align-self: flex-end;
 		}
 
 		span {
-			padding: 10px;
+			margin-right: 5px;
 			height: 40px;
 			line-height: 40px;
 			vertical-align: middle;
@@ -38,27 +37,45 @@
 			@include font-bold;
 			background-color: $red;
 			flex-basis: 40px;
-			flex-shrink: 1;
+			flex: 0 0 auto;
+			width: 40px;
+			flex: 1 0 auto;
+			padding: 10px;
 		}
 
-		.yellow {
-			background-color: yellow;
-			flex-basis: auto;
+		&-title {
+			color: $white;
+			background-color: $grey;
+			background: url($grey-texture);
+			flex: 0 1 auto;
+			padding: 10px 20px;
 		}
 
-		.red {
-			background-color: red;
-			flex-basis: 40px;
+		&-upvote {
+			flex: 1 0 auto;
+			padding: 10px;
 		}
 
 		.blue {
 			background-color: blue;
 		}
 
-		.green {
-			background-color: green;
-			flex-basis: auto;
-			flex-grow: 2;
+		&-avatars {
+			display: flex;
+			position: relative;
+			flex: 0 0 auto;
+			width: 350px;
+			padding: 10px;
+		}
+
+		img {
+			position: relative;
+			display: inline-block;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			margin: auto 0;
+			padding-left: 5px;
 		}
 	}
 
