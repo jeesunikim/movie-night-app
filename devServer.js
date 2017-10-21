@@ -51,6 +51,11 @@ admin.initializeApp({
 
 app.use(webpackDevMiddleware(compiler, {
    path: path.resolve(__dirname, "/public/build"),
+   headers: {
+      "Access-Control-Allow-Origin": "http://localhost"
+   },
+   hot: true,
+   lazy: false,
    index: 'index.html'
 }));
 
