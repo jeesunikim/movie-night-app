@@ -11,7 +11,11 @@ const extractSass = new ExtractTextPlugin({
 module.exports = {
 	devtool: "source-map",
 	context: path.resolve(__dirname, "src"),
-	entry: ["index.js", './assets/styles/styles.scss'],
+	entry: [
+		"webpack-hot-middleware/client?reload=true",
+		"index.js", 
+		"./assets/styles/styles.scss"
+	],
 	output: {
 		path: path.resolve(__dirname, "public/build"),
 		publicPath: "/build",
@@ -44,7 +48,8 @@ module.exports = {
 		]
 	},
 	plugins: [
-	    extractSass
+	    extractSass,
+	    new webpack.HotModuleReplacementPlugin()
 	],
 	resolve: {
 		modules: [
