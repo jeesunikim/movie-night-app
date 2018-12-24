@@ -3,4 +3,4 @@ node_modules/
 .env
 npm-debug.log
 public/build
-fb-movie-night-firebase-adminsdk.json
+movie-night-firebase-adminsdk.json
