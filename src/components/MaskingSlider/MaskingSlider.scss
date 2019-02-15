@@ -1,0 +1,13 @@
+.masking_slider {
+	display: flex;
+	max-width: 1280px;
+	width: 100%;
+	margin: 0 auto;
+	background: black;
+	color: #fff;
+
+	&__left,
+	&__right {
+		width: 50%;
+	}
+}

@@ -1,4 +1,7 @@
 import React from "react";
+import axios from "axios";
+
+const TMDB_URL_PATH = "https://image.tmdb.org/t/p/original";
 
 class AddMovieForm extends React.Component {
 	constructor() {
@@ -6,50 +9,47 @@ class AddMovieForm extends React.Component {
 		this.submitMovie = this.submitMovie.bind(this);
 		this.search = this.search.bind(this);
 		this.updateSearch = this.updateSearch.bind(this);
-		this.updateMovie = this.updateMovie.bind(this);
+		this.getSelectedMovie = this.getSelectedMovie.bind(this);
+
 		this.state = {
 			APImovies: {},
-			isSearching: false
+			isSearching: false,
+			selectedMovie: null
 		};
 	}
 
 	submitMovie(event) {
 		event.preventDefault();
-		const movie = {
-			name: this.name.value,
-			imdbID: this.imdb.value,
-			imageUrl: this.imageUrl.value,
-			likes: 0
-		};
-		this.props.addMovie(movie);
-		this.movieForm.reset();
+
+		if (this.state.selectedMovie) {
+			this.props.addMovie(this.state.selectedMovie);
+			this.movieForm.reset();
+		}
 	}
 
 	search(query = "") {
 		// @TODO: debounce is needed
-
 		if (query === "") {
 			this.setState({ isSearching: false });
 		} else {
 			// const url=`http://www.omdbapi.com/?s=${query}&apikey=e39c95bc&y=&r=json`;
-			const url =
-				"https://api.themoviedb.org/3/movie/550?api_key=c9a7006d14315f99408ebaca9b91622a";
+			const url = `https://api.themoviedb.org/3/search/movie?api_key=c9a7006d14315f99408ebaca9b91622a&language=en-US&query=${query}&page=1&include_adult=false`;
 			this.setState({ isSearching: true });
 
-			fetch(url, {
-				method: "GET"
-			})
+			axios
+				.get(url)
 				.then(res => {
-					console.log("res.json: ", res.json());
-					return res.json();
+					const movieResults = res.data.results;
+					// this.setState({ persons });
+					this.setState({ APImovies: movieResults.slice(0, 5) });
+					console.log(movieResults, " movieResults");
+					console.log(
+						"movieResults.slice(0, 5): ",
+						movieResults.slice(0, 5)
+					);
 				})
-				.then(json => {
-					this.setState({
-						APImovies: json.Search.slice(0, 5)
-					});
-				})
-				.catch(err => {
-					console.log(err, "err");
+				.catch(error => {
+					console.log(error);
 				});
 		}
 	}
@@ -58,16 +58,24 @@ class AddMovieForm extends React.Component {
 		this.search(evt.target.value);
 	}
 
-	updateMovie(url) {
-		this.setState({ isSearching: false });
-
-		const movieImgInput = document.getElementById("movieImgUrl");
+	getSelectedMovie(url) {
+		const { movie } = url;
 		const movieNameInput = document.getElementById("movieNameInput");
-		const imdbID = document.getElementById("imdbID");
 
-		movieImgInput.value = url.details.Poster;
-		movieNameInput.value = url.details.Title;
-		imdbID.value = url.details.imdbID;
+		const newMovie = {
+			id: movie.id,
+			title: movie.original_title,
+			backdropImg: TMDB_URL_PATH + movie.backdrop_path,
+			posterImg: TMDB_URL_PATH + movie.poster_path,
+			releaseDate: movie.release_date,
+			overview: movie.overview
+		};
+
+		this.setState({ isSearching: false, selectedMovie: newMovie }, () => {
+			console.log("getSelectedMovie this.state: ", this.state);
+		});
+
+		movieNameInput.value = newMovie.title;
 	}
 
 	render() {
@@ -86,22 +94,6 @@ class AddMovieForm extends React.Component {
 						id="movieNameInput"
 						onChange={e => this.updateSearch(e)}
 					/>
-					<input
-						ref={input => (this.imdb = input)}
-						autoComplete="off"
-						type="text"
-						className="text-edit hidden"
-						placeholder="imdb id"
-						id="imdbID"
-					/>
-					<input
-						ref={input => (this.imageUrl = input)}
-						autoComplete="off"
-						type="text"
-						className="text-edit hidden"
-						id="movieImgUrl"
-						placeholder="movie image"
-					/>
 					<button type="submit">Submit</button>
 				</form>
 				<ul
@@ -112,8 +104,8 @@ class AddMovieForm extends React.Component {
 					{Object.keys(this.state.APImovies).map(key => (
 						<ListFetchMovies
 							key={key}
-							details={this.state.APImovies[key]}
-							updateMovie={this.updateMovie}
+							movie={this.state.APImovies[key]}
+							getSelectedMovie={this.getSelectedMovie}
 						/>
 					))}
 				</ul>
@@ -123,11 +115,11 @@ class AddMovieForm extends React.Component {
 }
 
 function ListFetchMovies(props) {
-	const { details, updateMovie } = props;
+	const { movie, getSelectedMovie } = props;
 
 	return (
-		<li onClick={evt => updateMovie({ details })}>
-			{details.Title} {details.Year}
+		<li onClick={evt => getSelectedMovie({ movie })}>
+			{movie.title} ({movie.release_date})
 		</li>
 	);
 }

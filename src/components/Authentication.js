@@ -46,6 +46,11 @@ class Autentication extends React.Component {
 				var errorMessage = error.message;
 			});
 
+		console.log(
+			"firebaseConfig.auth.currentUser.uid: ",
+			firebaseConfig.auth.currentUser.uid
+		);
+		console.log("userData: ", userData);
 		const unsubscribe = firebaseConfig.auth.onAuthStateChanged(user => {
 			unsubscribe();
 
@@ -85,7 +90,7 @@ class Autentication extends React.Component {
 		return (
 			<nav className="login">
 				<p>Sign in to vote or submit a movie</p>
-				<a href="https://slack.com/oauth/authorize?scope=identity.basic,identity.email,identity.team,identity.avatar&client_id=3992851480.155742621031">
+				<a href="https://slack.com/api/oauth.access?scope=identity.basic,identity.email,identity.team,identity.avatar&client_id=3992851480.155742621031">
 					<img
 						alt="Sign in with Slack"
 						height="40"
