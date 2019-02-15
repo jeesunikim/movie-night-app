@@ -1,11 +1,11 @@
-const webpack = require('webpack');
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require("webpack");
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
 
 const extractSass = new ExtractTextPlugin({
-    filename: "bundle.css"
+	filename: "bundle.css"
 });
 
 module.exports = {
@@ -13,8 +13,8 @@ module.exports = {
 	context: path.resolve(__dirname, "src"),
 	entry: [
 		"webpack-hot-middleware/client?reload=true",
-		"index.js", 
-		"./assets/styles/styles.scss"
+		"index.js",
+		"./styles/styles.scss"
 	],
 	output: {
 		path: path.resolve(__dirname, "public/build"),
@@ -24,38 +24,33 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /\.js$/, 
-				include: [
-					path.resolve(__dirname, "./src")
-				],
+				test: /\.js$/,
+				include: [path.resolve(__dirname, "./src")],
 				exclude: /node_modules/,
 				loader: "babel-loader",
 				options: {
 					presets: ["es2015", "react"],
-					plugins: ['transform-object-rest-spread']
-				},
+					plugins: ["transform-object-rest-spread"]
+				}
 			},
 			{
 				test: /\.(sass|scss)$/,
-				loader: ExtractTextPlugin.extract(['css-loader', 'sass-loader'])
+				loader: ExtractTextPlugin.extract(["css-loader", "sass-loader"])
 			},
 			{
 				test: /\.css$/,
-				loader:  ExtractTextPlugin.extract({
-		        	loader: 'css-loader?importLoaders=1',
-		        }),
-			},
+				loader: ExtractTextPlugin.extract({
+					loader: "css-loader?importLoaders=1"
+				})
+			}
 		]
 	},
-	plugins: [
-	    extractSass,
-	    new webpack.HotModuleReplacementPlugin()
-	],
+	plugins: [extractSass, new webpack.HotModuleReplacementPlugin()],
 	resolve: {
 		modules: [
 			"node_modules",
-			path.resolve('src', 'components'),
-			path.resolve('src')
+			path.resolve("src", "components"),
+			path.resolve("src")
 		]
 	}
 };
