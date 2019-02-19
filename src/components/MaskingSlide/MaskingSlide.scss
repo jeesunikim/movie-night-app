@@ -1,0 +1,19 @@
+.c-masking-slider {
+  display: flex;
+  flex-direction: column;
+  //   overflow: hidden;
+  width: 50%;
+  height: 85vh;
+  margin: 0 auto;
+  background: black;
+  color: #fff;
+
+  &__slide {
+    // flex: 1 0 100%;
+    width: 100%;
+    height: 0;
+    background-size: cover;
+    background-position: center;
+    padding-top: 157%; // img height / img width * container-width
+  }
+}
