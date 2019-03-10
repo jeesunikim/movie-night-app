@@ -1,23 +1,24 @@
-@import 'reset';
-@import 'variables';
-@import 'typography';
-@import 'buttons';
+@import "reset";
+@import "variables";
+@import "layout";
+@import "typography";
+@import "buttons";
 
-@import 'modules/authentication';
-@import 'modules/list';
-@import 'modules/form';
-@import 'modules/carousel';
+@import "modules/authentication";
+@import "modules/list";
+@import "modules/form";
+@import "modules/carousel";
 
 body {
-	background-color: $grey-light;
-	background: url($grey-light-texture);
+  background-color: $grey-light;
+  background: url($grey-light-texture);
 }
 
 main {
-	margin: 0 auto;
-	position: relative;
+  margin: 0 auto;
+  position: relative;
 }
 
 .hidden {
-	display: none;
+  display: none;
 }
