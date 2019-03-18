@@ -1,14 +1,16 @@
-import React from "react";
+import React, { Component } from "react";
 import axios from "axios";
-import Firebase from "firebase";
-import firebaseConfig from "../../firebase";
+import { firebaseConfig } from "../../firebase";
 
-class Autentication extends React.Component {
+if (!process.env.SLACK_CLIENT_ID) {
+    throw new Error("no SLACK CLIENT ID");
+}
+
+const SLACK_CLIENT_ID = process.env.SLACK_CLIENT_ID;
+
+export default class Autentication extends Component {
     constructor() {
         super();
-
-        this.logout = this.logout.bind(this);
-        this.renderLogin = this.renderLogin.bind(this);
 
         this.state = {
             uid: null,
@@ -22,9 +24,7 @@ class Autentication extends React.Component {
     }
 
     componentWillUnmount() {
-        firebaseConfig.auth.signOut().then(() => {
-            this.setState({ uid: null });
-        });
+        this.logout();
     }
 
     async slackAuth() {
@@ -39,18 +39,14 @@ class Autentication extends React.Component {
     }
 
     firebaseAuth(userData) {
-        console.log(userData, " userData");
         firebaseConfig.auth
             .signInWithCustomToken(userData.firebaseToken)
             .catch(error => {
-                var errorCode = error.code;
-                var errorMessage = error.message;
+                console.error(error);
             });
 
         const unsubscribe = firebaseConfig.auth.onAuthStateChanged(user => {
             unsubscribe();
-
-            console.log(user, " user");
 
             if (user) {
                 const userRef = firebaseConfig.database.ref(
@@ -74,21 +70,25 @@ class Autentication extends React.Component {
                     userName: userData.userName,
                     userPhoto: userData.userPic
                 });
+            } else {
+                this.setState({ uid: null });
             }
         });
     }
 
-    logout() {
+    logout = () => {
         firebaseConfig.auth.signOut().then(() => {
             this.setState({ uid: null });
         });
-    }
+    };
 
-    renderLogin() {
+    renderLogin = () => {
         return (
             <nav className="login">
                 <p>Sign in to vote or submit a movie</p>
-                <a href="https://slack.com/oauth/authorize?client_id=215558999890.573667444998&scope=identity.avatar,identity.basic,identity.email,identity.team">
+                <a
+                    href={`https://slack.com/oauth/authorize?client_id=${SLACK_CLIENT_ID}&scope=identity.avatar,identity.basic,identity.email,identity.team`}
+                >
                     <img
                         alt="Sign in with Slack"
                         height="40"
@@ -99,7 +99,7 @@ class Autentication extends React.Component {
                 </a>
             </nav>
         );
-    }
+    };
 
     render() {
         const logout = <button onClick={this.logout}>Log out!</button>;
@@ -130,5 +130,3 @@ class Autentication extends React.Component {
         }
     }
 }
-
-export default Autentication;
