@@ -1,50 +1,77 @@
-import React, { Component } from "react";
+import React, { Component, FunctionComponent } from "react";
 import AddMovieForm from "../AddMovieForm";
 import MaskingSlide from "../MaskingSlide";
-import Authentication from "./Authentication";
-import { auth, database } from "../../firebase";
+import Authentication from "../Authentication";
+import { auth, database } from "../../../firebase";
 
 // import MovieList from "./MovieList";
 // import Carousel from "./Carousel";
+type FirebaseCallback = (n: object) => any;
 
-export default class App extends Component {
-    constructor(props) {
-        super(props);
-        this.addMovie = this.addMovie.bind(this);
-        this.removeMovie = this.removeMovie.bind(this);
-        this.firebaseRef = database.ref("/movies");
+interface State {
+    isLoaded: Boolean;
+    isAdded: Boolean;
+    movies: {
+        id: string;
+        title: string;
+        backdropImg: string;
+        posterImg: string;
+        releaseDate: string;
+        overview: string;
+        // createdBy: string;
+        // [key: string]: string;
+    };
+}
+export default class App extends Component<{}, State> {
+    public state = {
+        isLoaded: false,
+        isAdded: false,
+        movies: {
+            id: "",
+            title: "",
+            backdropImg: "",
+            posterImg: "",
+            releaseDate: "",
+            overview: ""
+        }
+    };
+    // constructor(props) {
+    //     super(props);
+    //     // this.addMovie = this.addMovie.bind(this);
+    //     // this.removeMovie = this.removeMovie.bind(this);
+    //     // database.ref("/movies") = database.ref("/movies");
 
-        // initial state
-        this.state = {
-            isLoaded: false,
-            movies: {},
-            isAdded: false
-        };
-    }
+    //     // initial state
+    //     this.state = {
+    //         isLoaded: false,
+    //         movies: {},
+    //         isAdded: false
+    //     };
+    // }
 
-    componentDidMount() {
-        this.firebaseRef.on("value", dataSnapshot => {
+    public componentDidMount() {
+        database.ref("/movies").on("value", (dataSnapshot: any) => {
             this.setState({
                 movies: Object.values(dataSnapshot.val()),
                 isLoaded: true
             });
         });
-        // if (this.state.isLoaded) {
-        //   console.log("this.state.isLoaded");
-        // }
     }
 
-    componentWillUnmount() {
-        this.firebaseRef.off();
+    public componentWillUnmount() {
+        database.ref("/movies").off();
         this.setState({ isLoaded: false });
     }
 
-    upvoteMovie = selectedMovie => {
+    public upvoteMovie = (selectedMovie: { movie: { key: number } }) => {
         const upvotesRef = database.ref("movies/" + selectedMovie.movie.key);
 
         if (auth.currentUser != null) {
-            const toggleVote = (firebaseRef, uid) => {
-                firebaseRef.transaction(movie => {
+            const toggleVote = (
+                firebaseRef: { transaction: FirebaseCallback },
+                uid: string
+            ) => {
+                firebaseRef.transaction((movie: any) => {
                     if (movie) {
                         if (movie.stars && movie.stars[uid]) {
                             movie.likes--;
@@ -64,9 +91,18 @@ export default class App extends Component {
         }
     };
 
-    addMovie(movie) {
+    public addMovie = (movie: {
+        id: string;
+        title: string;
+        backdropImg: string;
+        posterImg: string;
+        releaseDate: string;
+        overview: string;
+        // createdBy: string;
+        // key: string;
+    }) => {
         const { movies } = this.state;
-        const newMovieRef = this.firebaseRef.push();
+        const newMovieRef = database.ref("/movies").push();
 
         newMovieRef
             .set({
@@ -82,16 +118,19 @@ export default class App extends Component {
             .then(() => {
                 this.setState({ movies });
             });
-    }
+    };
 
-    removeMovie(key) {
-        const { movies } = this.state;
-        movies[key] = null;
-        this.setState({ movies });
-        this.firebaseRef.child("movie" + key).remove();
-    }
+    // public removeMovie = (key: any) => {
+    //     const { movies } = this.state;
+    //     movies[key] = null;
+    //     this.setState({ movies });
+    //     database
+    //         .ref("/movies")
+    //         .child("movie" + key)
+    //         .remove();
+    // };
 
-    filterMovies() {
+    public filterMovies() {
         const { movies } = this.state;
         const moviesArray = Object.values(movies);
         // Filter the movies to return ones that a user has not voted
@@ -99,7 +138,7 @@ export default class App extends Component {
         return moviesArray;
     }
 
-    render() {
+    public render() {
         const { isLoaded, movies } = this.state;
         const filteredMovies = this.filterMovies();
         const moviesHalfList = Math.floor(filteredMovies.length / 2);
@@ -114,7 +153,7 @@ export default class App extends Component {
         return (
             <div className="MovieApp">
                 <Authentication />
-                <h1>Firstborn Movie Night</h1>
+                <h1>Friends in NYC Movie Night</h1>
                 <AddMovieForm addMovie={this.addMovie} />
                 <h1>The total length of movies: {filteredMovies.length} </h1>
                 {isLoaded && (
@@ -148,6 +187,6 @@ export default class App extends Component {
     }
 }
 
-const Slider = ({ children }) => {
+const Slider: FunctionComponent = ({ children }) => {
     return <div className="MovieApp_Slider">{children}</div>;
 };

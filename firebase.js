@@ -3,7 +3,7 @@ require("firebase/auth");
 require("firebase/database");
 
 const config = {
-    apiKey: "AIzaSyAU80pmT8LYBN5lelCa4uyzoLgAHEJH-5E",
+    apiKey: process.env.API_FIREBASE_KEY,
     authDomain: "fb-movie-night.firebaseapp.com",
     databaseURL: "https://fb-movie-night.firebaseio.com",
     projectId: "fb-movie-night",
