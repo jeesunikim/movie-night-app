@@ -127,5 +127,5 @@ router.get("/users", (req, res) => {
 app.use("/api", router);
 
 app.listen(port, () => {
-    console.log("Listening on port 3333!");
+    console.log(colors.red("Ready on http://localhost:3333"));
 });

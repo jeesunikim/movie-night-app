@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { firebaseConfig } from "../../../firebase";
+import { auth, database } from "../../../firebase";
 
 if (!process.env.SLACK_CLIENT_ID) {
     throw new Error("no SLACK CLIENT ID");
@@ -8,26 +8,28 @@ if (!process.env.SLACK_CLIENT_ID) {
 
 const SLACK_CLIENT_ID = process.env.SLACK_CLIENT_ID;
 
-export default class Autentication extends Component {
-    constructor() {
-        super();
+interface State {
+    uid: string | null;
+    userName: string;
+    userPhoto: string;
+}
 
-        this.state = {
-            uid: null,
-            userName: null,
-            userPhoto: null
-        };
-    }
+export default class Autentication extends Component<{}, State> {
+    public state = {
+        uid: "",
+        userName: "",
+        userPhoto: ""
+    };
 
-    componentDidMount() {
+    public componentDidMount() {
         this.slackAuth();
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         this.logout();
     }
 
-    async slackAuth() {
+    private async slackAuth() {
         try {
             const response = await axios.get("/api/users");
             const userData = await response.data;
@@ -38,20 +40,23 @@ export default class Autentication extends Component {
         }
     }
 
-    firebaseAuth(userData) {
-        firebaseConfig.auth
-            .signInWithCustomToken(userData.firebaseToken)
-            .catch(error => {
+    public firebaseAuth(userData: {
+        firebaseToken: string;
+        user: string;
+        userName: string;
+        userPic: string;
+    }) {
+        auth.signInWithCustomToken(userData.firebaseToken).catch(
+            (error: string) => {
                 console.error(error);
-            });
+            }
+        );
 
-        const unsubscribe = firebaseConfig.auth.onAuthStateChanged(user => {
+        const unsubscribe = auth.onAuthStateChanged((user: string) => {
             unsubscribe();
 
             if (user) {
-                const userRef = firebaseConfig.database.ref(
-                    "/users/" + firebaseConfig.auth.currentUser.uid
-                );
+                const userRef = database.ref("/users/" + auth.currentUser.uid);
 
                 userRef
                     .set({
@@ -66,7 +71,7 @@ export default class Autentication extends Component {
                     });
 
                 this.setState({
-                    uid: firebaseConfig.auth.currentUser.uid,
+                    uid: auth.currentUser.uid,
                     userName: userData.userName,
                     userPhoto: userData.userPic
                 });
@@ -76,13 +81,13 @@ export default class Autentication extends Component {
         });
     }
 
-    logout = () => {
-        firebaseConfig.auth.signOut().then(() => {
+    public logout = () => {
+        auth.signOut().then(() => {
             this.setState({ uid: null });
         });
     };
 
-    renderLogin = () => {
+    public renderLogin = () => {
         return (
             <nav className="login">
                 <p>Sign in to vote or submit a movie</p>
@@ -101,7 +106,7 @@ export default class Autentication extends Component {
         );
     };
 
-    render() {
+    public render() {
         const logout = <button onClick={this.logout}>Log out!</button>;
 
         // check if they are logged in

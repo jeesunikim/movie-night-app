@@ -9,7 +9,18 @@ const TMDB_URL_PATH = "https://image.tmdb.org/t/p/original";
 const API_TMDB_KEY = process.env.API_TMDB_KEY;
 
 interface Props {
-    addMovie: (data: {}) => void;
+    addMovie: (
+        data: {
+            id: string;
+            title: string;
+            backdropImg: string;
+            posterImg: string;
+            releaseDate: string;
+            overview: string;
+            // createdBy: string;
+            // key: string;
+        }
+    ) => void;
 }
 
 interface State {
@@ -24,6 +35,8 @@ interface State {
         posterImg: string;
         releaseDate: string;
         overview: string;
+        // createdBy: string;
+        // key: string;
     };
 }
 
@@ -47,13 +60,13 @@ class AddMovieForm extends Component<Props, State> {
                 posterImg: "",
                 releaseDate: "",
                 overview: ""
+                // createdBy: "",
+                // key: ""
             }
         };
         this.movieFormRef = React.createRef();
         this.movieInputNameRef = React.createRef();
     }
-
-    //  = createRef<HTMLFormElement | null>();
 
     public submitMovie(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -83,11 +96,6 @@ class AddMovieForm extends Component<Props, State> {
                     // (data: MovieResponse)
                     // this.setState({ persons });
                     this.setState({ APImovies: movieResults.slice(0, 5) });
-                    console.log(movieResults, " movieResults");
-                    console.log(
-                        "movieResults.slice(0, 5): ",
-                        movieResults.slice(0, 5)
-                    );
                 })
                 .catch(error => {
                     console.log(error);
