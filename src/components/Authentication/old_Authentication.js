@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { firebaseConfig } from "../../firebase";
+import { firebaseConfig } from "../../../firebase";
 
 if (!process.env.SLACK_CLIENT_ID) {
     throw new Error("no SLACK CLIENT ID");

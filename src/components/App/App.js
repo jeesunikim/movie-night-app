@@ -1,17 +1,18 @@
 import React, { Component } from "react";
-import AddMovieForm from "./AddMovieForm";
+import AddMovieForm from "../AddMovieForm";
+import MaskingSlide from "../MaskingSlide";
+import Authentication from "./Authentication";
+import { auth, database } from "../../firebase";
+
 // import MovieList from "./MovieList";
 // import Carousel from "./Carousel";
-import MaskingSlide from "./MaskingSlide";
-import Authentication from "./Authentication";
-import { firebaseConfig } from "../../firebase";
 
 export default class App extends Component {
     constructor(props) {
         super(props);
         this.addMovie = this.addMovie.bind(this);
         this.removeMovie = this.removeMovie.bind(this);
-        this.firebaseRef = firebaseConfig.database.ref("/movies");
+        this.firebaseRef = database.ref("/movies");
 
         // initial state
         this.state = {
@@ -39,11 +40,9 @@ export default class App extends Component {
     }
 
     upvoteMovie = selectedMovie => {
-        const upvotesRef = firebaseConfig.database.ref(
-            "movies/" + selectedMovie.movie.key
-        );
+        const upvotesRef = database.ref("movies/" + selectedMovie.movie.key);
 
-        if (firebaseConfig.auth.currentUser != null) {
+        if (auth.currentUser != null) {
             const toggleVote = (firebaseRef, uid) => {
                 firebaseRef.transaction(movie => {
                     if (movie) {
@@ -61,7 +60,7 @@ export default class App extends Component {
                     return movie;
                 });
             };
-            toggleVote(upvotesRef, firebaseConfig.auth.currentUser.uid);
+            toggleVote(upvotesRef, auth.currentUser.uid);
         }
     };
 

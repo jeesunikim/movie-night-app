@@ -10,7 +10,6 @@ const webpack = require("webpack");
 const webpackConfig = require("./webpack.config.dev");
 
 // firebase
-const firebase = require("firebase");
 const firebaseConfig = require("./firebase");
 
 // firebase admin
